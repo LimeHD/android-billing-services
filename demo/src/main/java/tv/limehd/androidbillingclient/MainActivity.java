@@ -1,4 +1,4 @@
-package tv.limehd.androidbillingmodule;
+package tv.limehd.androidbillingclient;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;

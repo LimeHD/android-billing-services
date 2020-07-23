@@ -1,2 +1,3 @@
-include ':app'
+include ':androidbillingmodule'
+include ':demo'
 rootProject.name = "Android-billing-module"
