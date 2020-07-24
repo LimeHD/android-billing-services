@@ -10,14 +10,14 @@ import tv.limehd.androidbillingmodule.servicesStrategy.ServiceHuaweiStrategy;
 
 public class PayService {
 
-    private EnumPaymentService nameService;
+    private EnumPaymentService enumPaymentService;
     private IPayServicesStrategy servicesStrategy;
     private Context context;
 
-    public PayService(Context context, EnumPaymentService paymentService) {
+    public PayService(Context context, EnumPaymentService enumPaymentService) {
         this.context = context;
-        this.nameService = paymentService;
-        this.servicesStrategy = initServicesStrategyByPayService(nameService);
+        this.enumPaymentService = enumPaymentService;
+        this.servicesStrategy = initServicesStrategyByPayService(this.enumPaymentService);
     }
 
     private IPayServicesStrategy initServicesStrategyByPayService(EnumPaymentService paymentServices) {
@@ -33,6 +33,6 @@ public class PayService {
     public void tryVerifyExistence(ExistenceServiceListener existenceServiceListener) {
         if(servicesStrategy == null) return;
         boolean isExistenceService = servicesStrategy.isVerifyExistenceService(context);
-        existenceServiceListener.callBackExistenceService(nameService, isExistenceService);
+        existenceServiceListener.callBackExistenceService(enumPaymentService, isExistenceService);
     }
 }
