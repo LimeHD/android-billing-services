@@ -24,12 +24,14 @@ public class ControllerVerifyServices {
         checkedServices = new HashMap<>();
 
         for (EnumPaymentService nameService : EnumPaymentService.values()) {
-            controlService(nameService);
+            tryControlService(nameService);
         }
     }
 
-    private void controlService(EnumPaymentService enumPaymentService) {
-        services.get(enumPaymentService).verifyExistence(new ExistenceServiceListener() {
+    private void tryControlService(EnumPaymentService enumPaymentService) {
+        if(services == null) return;
+        
+        services.get(enumPaymentService).tryVerifyExistence(new ExistenceServiceListener() {
             @Override
             public void callBackExistenceService(EnumPaymentService paymentService, boolean existing) {
                 checkedServices.put(paymentService, existing);
