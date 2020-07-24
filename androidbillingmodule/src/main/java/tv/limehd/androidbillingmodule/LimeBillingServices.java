@@ -22,6 +22,7 @@ public class LimeBillingServices {
         if(servicesStrategy == null) {
             return false;
         } else {
+            servicesStrategy.buy();
             return true;
         }
     }
