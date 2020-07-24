@@ -1,19 +1,15 @@
 package tv.limehd.androidbillingmodule;
 
-import tv.limehd.androidbillingmodule.Interfaces.IPayServicesStrategy;
-import tv.limehd.androidbillingmodule.ServicesStrategy.ServiceGoogleStrategy;
-import tv.limehd.androidbillingmodule.ServicesStrategy.ServiceHuaweiStrategy;
+import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
+import tv.limehd.androidbillingmodule.servicesPay.PayService;
+import tv.limehd.androidbillingmodule.servicesStrategy.ServiceGoogleStrategy;
+import tv.limehd.androidbillingmodule.servicesStrategy.ServiceHuaweiStrategy;
 
 public class LimeBillingServices {
 
-    public enum PayServices {
-        google,
-        huawei,
-    }
-
     private IPayServicesStrategy servicesStrategy;
 
-    public boolean tryBuySubscriptionFrom(PayServices payServices) {
+    public boolean tryBuySubscriptionFrom(PayService payServices) {
         this.servicesStrategy = null;
         switch (payServices) {
             case google: servicesStrategy = new ServiceGoogleStrategy(); break;

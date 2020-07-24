@@ -3,9 +3,8 @@ package tv.limehd.androidbillingmodule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 
-import static org.mockito.Mockito.verify;
+import tv.limehd.androidbillingmodule.servicesPay.PayService;
 
 import static org.junit.Assert.*;
 
@@ -17,13 +16,13 @@ import static org.junit.Assert.*;
 public class LimeBillingPayServicesTest {
 
     private LimeBillingServices limeBillingServices;
-    private LimeBillingServices.PayServices[] services;
+    private PayService[] services;
 
 
     @Before
     public void initBillingServices() {
         limeBillingServices = new LimeBillingServices();
-        services = LimeBillingServices.PayServices.values();
+        services = PayService.values();
     }
 
     @Test
@@ -33,14 +32,14 @@ public class LimeBillingPayServicesTest {
 
     @Test
     public void enumServicesLowerCase() {
-        for (LimeBillingServices.PayServices service : services) {
+        for (PayService service : services) {
             assertEquals(service.name(), service.name().toLowerCase());
         }
     }
 
     @Test
     public void numberOfCallsBuyMethod() {
-       for (LimeBillingServices.PayServices service : LimeBillingServices.PayServices.values()) {
+       for (PayService service : PayService.values()) {
            assertTrue(limeBillingServices.tryBuySubscriptionFrom(service));
         }
     }

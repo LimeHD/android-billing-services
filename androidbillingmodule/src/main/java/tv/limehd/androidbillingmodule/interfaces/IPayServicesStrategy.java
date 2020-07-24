@@ -1,4 +1,4 @@
-package tv.limehd.androidbillingmodule.Interfaces;
+package tv.limehd.androidbillingmodule.interfaces;
 
 public interface IPayServicesStrategy {
     void buy();
