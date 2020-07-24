@@ -30,7 +30,8 @@ public class PayService {
         return iPayServicesStrategy;
     }
 
-    public void verifyExistence (ExistenceServiceListener existenceServiceListener) {
+    public void tryVerifyExistence(ExistenceServiceListener existenceServiceListener) {
+        if(servicesStrategy == null) return;
         boolean isExistenceService = servicesStrategy.isVerifyExistenceService(context);
         existenceServiceListener.callBackExistenceService(nameService, isExistenceService);
     }
