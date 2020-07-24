@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import tv.limehd.androidbillingmodule.servicesPay.EnumPaymentService;
+import tv.limehd.androidbillingmodule.servicesEnum.EnumPaymentService;
 
 import static org.junit.Assert.*;
 
@@ -39,6 +39,7 @@ public class LimeBillingPayServicesTest {
 
     @Test
     public void numberOfCallsBuyMethod() {
+        limeBillingServices.init();
        for (EnumPaymentService service : EnumPaymentService.values()) {
            assertTrue(limeBillingServices.tryBuySubscriptionFrom(service));
         }
