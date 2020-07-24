@@ -1,25 +1,36 @@
 package tv.limehd.androidbillingmodule;
 
-import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
-import tv.limehd.androidbillingmodule.servicesPay.PayService;
-import tv.limehd.androidbillingmodule.servicesStrategy.ServiceGoogleStrategy;
-import tv.limehd.androidbillingmodule.servicesStrategy.ServiceHuaweiStrategy;
+import java.util.HashMap;
+
+import tv.limehd.androidbillingmodule.controllers.ControllerVerifyServices;
+import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServicesListener;
+import tv.limehd.androidbillingmodule.service.PayService;
+import tv.limehd.androidbillingmodule.servicesPay.EnumPaymentService;
 
 public class LimeBillingServices {
 
-    private IPayServicesStrategy servicesStrategy;
+    private HashMap<EnumPaymentService, PayService> payServices;
 
-    public boolean tryBuySubscriptionFrom(PayService payServices) {
-        this.servicesStrategy = null;
-        switch (payServices) {
-            case google: servicesStrategy = new ServiceGoogleStrategy(); break;
-            case huawei: servicesStrategy = new ServiceHuaweiStrategy(); break;
-        }
-        if(servicesStrategy == null) {
-            return false;
-        } else {
-            servicesStrategy.buy();
-            return true;
-        }
+    public LimeBillingServices() {
+
     }
+
+    public LimeBillingServices init() {
+        payServices = new HashMap<>();
+        for (EnumPaymentService servicesName: EnumPaymentService.values()) {
+            payServices.put(servicesName, initServiceByPaymentService(servicesName));
+        }
+        return this;
+    }
+
+    public void verifyExistenceAllService(ExistenceServicesListener existenceServicesListener) {
+        ControllerVerifyServices controllerVerifyServices = new ControllerVerifyServices(payServices, existenceServicesListener);
+    }
+
+    private PayService initServiceByPaymentService(EnumPaymentService paymentService) {
+        PayService payService = new PayService(paymentService);
+        return payService;
+    }
+
+
 }
