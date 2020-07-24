@@ -1,6 +1,7 @@
 package tv.limehd.androidbillingclient;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,20 +16,30 @@ public class MainActivity extends AppCompatActivity {
 
     private Button buttonGoogleSDK;
     private Button buttonHuaweiSDK;
+    private LimeBillingServices limeBillingServices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initializationView();
+        initializationLimeBillingServices();
+        verifyAllService();
+        setButtonListener();
+    }
+
+    private void initializationView() {
         buttonGoogleSDK = findViewById(R.id.button_google_sdk);
         buttonHuaweiSDK = findViewById(R.id.button_huawei_sdk);
+    }
 
-
-        LimeBillingServices limeBillingServices = new LimeBillingServices(getApplicationContext())
+    private void initializationLimeBillingServices() {
+        limeBillingServices = new LimeBillingServices(getApplicationContext())
                 .init();
+    }
 
-
+    private void verifyAllService() {
         limeBillingServices.verifyExistenceAllService(new ExistenceServicesListener() {
             @Override
             public void callBackExistenceServices(HashMap<EnumPaymentService, Boolean> existing) {
@@ -37,6 +48,22 @@ public class MainActivity extends AppCompatActivity {
 
                 buttonHuaweiSDK.setEnabled(existing.get(EnumPaymentService.huawei));
                 buttonHuaweiSDK.setText("service: " + EnumPaymentService.huawei.name());
+            }
+        });
+    }
+
+    private void setButtonListener() {
+        buttonGoogleSDK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        buttonHuaweiSDK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
