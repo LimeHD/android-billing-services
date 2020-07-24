@@ -40,7 +40,7 @@ public class LimeBillingServices {
     }
 
     private PayService initServiceByPaymentService(EnumPaymentService paymentService) {
-        PayService payService = new PayService(paymentService);
+        PayService payService = new PayService(context, paymentService);
         return payService;
     }
 

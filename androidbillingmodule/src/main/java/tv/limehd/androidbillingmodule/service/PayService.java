@@ -1,5 +1,7 @@
 package tv.limehd.androidbillingmodule.service;
 
+import android.content.Context;
+
 import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServiceListener;
 import tv.limehd.androidbillingmodule.servicesEnum.EnumPaymentService;
@@ -10,10 +12,12 @@ public class PayService {
 
     private EnumPaymentService nameService;
     private IPayServicesStrategy servicesStrategy;
+    private Context context;
 
-    public PayService(EnumPaymentService paymentService) {
-        nameService = paymentService;
-        servicesStrategy = initServicesStrategyByPayService(nameService);
+    public PayService(Context context, EnumPaymentService paymentService) {
+        this.context = context;
+        this.nameService = paymentService;
+        this.servicesStrategy = initServicesStrategyByPayService(nameService);
     }
 
     private IPayServicesStrategy initServicesStrategyByPayService(EnumPaymentService paymentServices) {
