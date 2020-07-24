@@ -1,5 +1,7 @@
 package tv.limehd.androidbillingmodule;
 
+import android.content.Context;
+
 import java.util.HashMap;
 
 import tv.limehd.androidbillingmodule.controllers.ControllerVerifyServices;
@@ -10,9 +12,10 @@ import tv.limehd.androidbillingmodule.servicesEnum.EnumPaymentService;
 public class LimeBillingServices {
 
     private HashMap<EnumPaymentService, PayService> payServices;
+    private Context context;
 
-    public LimeBillingServices() {
-
+    public LimeBillingServices(Context context) {
+        this.context = context;
     }
 
     public LimeBillingServices init() {
@@ -40,5 +43,5 @@ public class LimeBillingServices {
         PayService payService = new PayService(paymentService);
         return payService;
     }
-    
+
 }

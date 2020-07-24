@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.e("TEST", "Verify");
-        LimeBillingServices limeBillingServices = new LimeBillingServices()
+        LimeBillingServices limeBillingServices = new LimeBillingServices(getApplicationContext())
                 .init();
 
 
