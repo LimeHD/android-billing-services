@@ -21,7 +21,7 @@ public class LimeBillingPayServicesTest {
 
     @Before
     public void initBillingServices() {
-        limeBillingServices = new LimeBillingServices();
+        limeBillingServices = new LimeBillingServices(null);
         services = EnumPaymentService.values();
     }
 
