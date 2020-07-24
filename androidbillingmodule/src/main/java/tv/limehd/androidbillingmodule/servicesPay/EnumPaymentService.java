@@ -1,6 +1,6 @@
 package tv.limehd.androidbillingmodule.servicesPay;
 
-public enum PayService {
+public enum EnumPaymentService {
     google,
     huawei
 }
