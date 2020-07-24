@@ -7,4 +7,9 @@ public class ServiceOtherStrategy implements IPayServicesStrategy {
     public void buy() {
 
     }
+
+    @Override
+    public boolean verifyExistenceService() {
+        return false;
+    }
 }

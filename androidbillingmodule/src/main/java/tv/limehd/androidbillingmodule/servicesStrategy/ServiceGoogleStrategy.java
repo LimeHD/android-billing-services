@@ -7,4 +7,9 @@ public class ServiceGoogleStrategy implements IPayServicesStrategy {
     public void buy() {
 
     }
+
+    @Override
+    public boolean verifyExistenceService() {
+        return true;
+    }
 }
