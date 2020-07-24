@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 import tv.limehd.androidbillingmodule.LimeBillingServices;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServicesListener;
-import tv.limehd.androidbillingmodule.servicesPay.EnumPaymentService;
+import tv.limehd.androidbillingmodule.servicesEnum.EnumPaymentService;
 
 public class MainActivity extends AppCompatActivity {
 

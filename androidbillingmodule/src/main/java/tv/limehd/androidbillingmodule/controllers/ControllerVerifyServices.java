@@ -6,7 +6,7 @@ import java.util.HashMap;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServiceListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServicesListener;
 import tv.limehd.androidbillingmodule.service.PayService;
-import tv.limehd.androidbillingmodule.servicesPay.EnumPaymentService;
+import tv.limehd.androidbillingmodule.servicesEnum.EnumPaymentService;
 
 public class ControllerVerifyServices {
 

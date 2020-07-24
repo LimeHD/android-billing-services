@@ -2,8 +2,7 @@ package tv.limehd.androidbillingmodule.service;
 
 import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServiceListener;
-import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServicesListener;
-import tv.limehd.androidbillingmodule.servicesPay.EnumPaymentService;
+import tv.limehd.androidbillingmodule.servicesEnum.EnumPaymentService;
 import tv.limehd.androidbillingmodule.servicesStrategy.ServiceGoogleStrategy;
 import tv.limehd.androidbillingmodule.servicesStrategy.ServiceHuaweiStrategy;
 
@@ -17,7 +16,7 @@ public class PayService {
         servicesStrategy = initServicesStrategyByPayService(nameService);
     }
 
-    public static IPayServicesStrategy initServicesStrategyByPayService(EnumPaymentService paymentServices) {
+    private IPayServicesStrategy initServicesStrategyByPayService(EnumPaymentService paymentServices) {
         IPayServicesStrategy iPayServicesStrategy;
         switch (paymentServices) {
             case google: iPayServicesStrategy = new ServiceGoogleStrategy(); break;
