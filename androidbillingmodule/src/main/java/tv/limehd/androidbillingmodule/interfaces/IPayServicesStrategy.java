@@ -7,5 +7,5 @@ import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServiceListe
 public interface IPayServicesStrategy {
     void buy();
 
-    boolean verifyExistenceService(Context context);
+    boolean isVerifyExistenceService(Context context);
 }

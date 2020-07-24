@@ -11,7 +11,7 @@ public class ServiceOtherStrategy implements IPayServicesStrategy {
     }
 
     @Override
-    public boolean verifyExistenceService(Context context) {
+    public boolean isVerifyExistenceService(Context context) {
         return false;
     }
 

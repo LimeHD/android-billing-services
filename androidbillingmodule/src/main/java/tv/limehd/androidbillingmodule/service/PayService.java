@@ -31,7 +31,7 @@ public class PayService {
     }
 
     public void verifyExistence (ExistenceServiceListener existenceServiceListener) {
-        boolean isExistenceService = servicesStrategy.verifyExistenceService(context);
+        boolean isExistenceService = servicesStrategy.isVerifyExistenceService(context);
         existenceServiceListener.callBackExistenceService(nameService, isExistenceService);
     }
 }

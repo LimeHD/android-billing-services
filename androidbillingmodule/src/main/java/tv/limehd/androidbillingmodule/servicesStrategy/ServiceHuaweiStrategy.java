@@ -15,7 +15,7 @@ public class ServiceHuaweiStrategy implements IPayServicesStrategy {
     }
 
     @Override
-    public boolean verifyExistenceService(Context context) {
+    public boolean isVerifyExistenceService(Context context) {
         int status = HuaweiApiAvailability.getInstance().isHuaweiMobileServicesAvailable(context);
         return status == ConnectionResult.SUCCESS;
     }
