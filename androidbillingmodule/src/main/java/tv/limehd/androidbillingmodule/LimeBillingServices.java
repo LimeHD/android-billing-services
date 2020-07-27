@@ -2,6 +2,8 @@ package tv.limehd.androidbillingmodule;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import java.util.HashMap;
 
 import tv.limehd.androidbillingmodule.controllers.ControllerVerifyServices;
@@ -14,16 +16,17 @@ public class LimeBillingServices {
     private HashMap<EnumPaymentService, PayService> payServices;
     private Context context;
 
-    public LimeBillingServices(Context context) {
-        this.context = context;
+    public LimeBillingServices(@NonNull Context context) {
+        init(context);
     }
 
-    public LimeBillingServices init() {
+    private void init(Context context) {
+        if (context == null) return;
+        this.context = context;
         payServices = new HashMap<>();
-        for (EnumPaymentService servicesName: EnumPaymentService.values()) {
+        for (EnumPaymentService servicesName : EnumPaymentService.values()) {
             payServices.put(servicesName, initServiceByPaymentService(servicesName));
         }
-        return this;
     }
 
     public void verifyExistenceAllService(ExistenceServicesListener existenceServicesListener) {
@@ -31,12 +34,19 @@ public class LimeBillingServices {
     }
 
     public boolean tryBuySubscriptionFrom(EnumPaymentService nameService) {
+        if (payServices == null) return false;
         PayService payService = payServices.get(nameService);
-        if(payService != null) {
-            return true;
-        } else {
-            return false;
+        return payService != null;
+    }
+
+    public void requestDataAboutAllSubscriptions() {
+        for (EnumPaymentService service : EnumPaymentService.values()) {
+
         }
+    }
+
+    public void requestDataAboutSubscription() {
+
     }
 
     private PayService initServiceByPaymentService(EnumPaymentService paymentService) {
