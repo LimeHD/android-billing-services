@@ -17,7 +17,7 @@ public class ServiceGoogleStrategy implements IPayServicesStrategy {
 
     @Override
     public boolean isVerifyExistenceService(Context context) {
-        if(context == null) return false;
+        if (context == null) return false;
         int status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
         return status == ConnectionResult.SUCCESS;
     }
