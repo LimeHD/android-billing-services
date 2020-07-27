@@ -9,7 +9,7 @@ import java.util.HashMap;
 import tv.limehd.androidbillingmodule.controllers.ControllerVerifyServices;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServicesListener;
 import tv.limehd.androidbillingmodule.service.PayService;
-import tv.limehd.androidbillingmodule.servicesEnum.EnumPaymentService;
+import tv.limehd.androidbillingmodule.service.EnumPaymentService;
 
 public class LimeBillingServices {
 
@@ -39,13 +39,10 @@ public class LimeBillingServices {
         return payService != null;
     }
 
-    public void requestDataAboutAllSubscriptions() {
-        for (EnumPaymentService service : EnumPaymentService.values()) {
-
-        }
-    }
-
-    public void requestDataAboutSubscription() {
+    public void tryRequestInventoryFrom(@NonNull EnumPaymentService service) {
+        if(service == null) return;
+        if(payServices == null) return;
+        PayService payService = payServices.get(service);
 
     }
 

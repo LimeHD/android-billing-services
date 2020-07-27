@@ -1,4 +1,4 @@
-package tv.limehd.androidbillingmodule.servicesStrategy;
+package tv.limehd.androidbillingmodule.service.strategy;
 
 import android.content.Context;
 
@@ -13,6 +13,11 @@ public class ServiceOtherStrategy implements IPayServicesStrategy {
     @Override
     public boolean isVerifyExistenceService(Context context) {
         return false;
+    }
+
+    @Override
+    public void requestInventory() {
+
     }
 
 }

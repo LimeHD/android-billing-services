@@ -1,4 +1,4 @@
-package tv.limehd.androidbillingmodule.servicesStrategy;
+package tv.limehd.androidbillingmodule.service.strategy;
 
 import android.content.Context;
 
@@ -20,6 +20,11 @@ public class ServiceGoogleStrategy implements IPayServicesStrategy {
         if (context == null) return false;
         int status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
         return status == ConnectionResult.SUCCESS;
+    }
+
+    @Override
+    public void requestInventory() {
+
     }
 
 }

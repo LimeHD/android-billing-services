@@ -37,6 +37,8 @@ dependencies {
     implementation "com.google.android.gms:play-services-base:17.1.0"
     implementation 'com.huawei.hms:iap:4.0.4.301'
 
+    implementation 'com.android.billingclient:billing:3.0.0'
+
 }
 
 apply plugin: 'com.huawei.agconnect'

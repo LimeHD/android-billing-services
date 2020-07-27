@@ -8,4 +8,6 @@ public interface IPayServicesStrategy {
     void buy();
 
     boolean isVerifyExistenceService(Context context);
+
+    void requestInventory();
 }

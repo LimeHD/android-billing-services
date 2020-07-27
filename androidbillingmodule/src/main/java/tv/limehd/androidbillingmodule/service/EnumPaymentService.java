@@ -1,4 +1,4 @@
-package tv.limehd.androidbillingmodule.servicesEnum;
+package tv.limehd.androidbillingmodule.service;
 
 public enum EnumPaymentService {
     google,

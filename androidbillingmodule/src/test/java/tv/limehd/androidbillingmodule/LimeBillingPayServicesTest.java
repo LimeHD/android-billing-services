@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import tv.limehd.androidbillingmodule.servicesEnum.EnumPaymentService;
+import tv.limehd.androidbillingmodule.service.EnumPaymentService;
 
 import static org.junit.Assert.*;
 

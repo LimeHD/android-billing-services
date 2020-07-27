@@ -4,9 +4,8 @@ import android.content.Context;
 
 import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServiceListener;
-import tv.limehd.androidbillingmodule.servicesEnum.EnumPaymentService;
-import tv.limehd.androidbillingmodule.servicesStrategy.ServiceGoogleStrategy;
-import tv.limehd.androidbillingmodule.servicesStrategy.ServiceHuaweiStrategy;
+import tv.limehd.androidbillingmodule.service.strategy.ServiceGoogleStrategy;
+import tv.limehd.androidbillingmodule.service.strategy.ServiceHuaweiStrategy;
 
 public class PayService {
 
@@ -34,5 +33,11 @@ public class PayService {
         if(servicesStrategy == null) return;
         boolean isExistenceService = servicesStrategy.isVerifyExistenceService(context);
         existenceServiceListener.callBackExistenceService(enumPaymentService, isExistenceService);
+    }
+
+    public void tryRequestInventory() {
+        if(servicesStrategy == null) return;
+            servicesStrategy.requestInventory();
+
     }
 }

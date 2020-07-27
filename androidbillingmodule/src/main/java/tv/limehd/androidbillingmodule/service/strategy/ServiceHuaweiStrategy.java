@@ -1,4 +1,4 @@
-package tv.limehd.androidbillingmodule.servicesStrategy;
+package tv.limehd.androidbillingmodule.service.strategy;
 
 import android.content.Context;
 
@@ -18,6 +18,11 @@ public class ServiceHuaweiStrategy implements IPayServicesStrategy {
         if (context == null) return false;
         int status = HuaweiApiAvailability.getInstance().isHuaweiMobileServicesAvailable(context);
         return status == ConnectionResult.SUCCESS;
+    }
+
+    @Override
+    public void requestInventory() {
+
     }
 
 }
