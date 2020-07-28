@@ -1,5 +1,6 @@
 package tv.limehd.androidbillingmodule;
 
+import android.app.Activity;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -8,21 +9,23 @@ import java.util.HashMap;
 
 import tv.limehd.androidbillingmodule.controllers.ControllerVerifyServices;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServicesListener;
-import tv.limehd.androidbillingmodule.service.PayService;
 import tv.limehd.androidbillingmodule.service.EnumPaymentService;
+import tv.limehd.androidbillingmodule.service.PayService;
 
 public class LimeBillingServices {
 
     private HashMap<EnumPaymentService, PayService> payServices;
     private Context context;
+    private Activity activity;
 
-    public LimeBillingServices(@NonNull Context context) {
-        init(context);
+    public LimeBillingServices(@NonNull Activity activity) {
+        init(activity);
     }
 
-    private void init(Context context) {
+    private void init(@NonNull Activity activity) {
         if (context == null) return;
-        this.context = context;
+        this.context = activity;
+        this.activity = activity;
         payServices = new HashMap<>();
         for (EnumPaymentService servicesName : EnumPaymentService.values()) {
             payServices.put(servicesName, initServiceByPaymentService(servicesName));
@@ -31,6 +34,7 @@ public class LimeBillingServices {
 
     public void verifyExistenceAllService(ExistenceServicesListener existenceServicesListener) {
         ControllerVerifyServices controllerVerifyServices = new ControllerVerifyServices(payServices, existenceServicesListener);
+        controllerVerifyServices.verifyAllServices();
     }
 
     public boolean tryBuySubscriptionFrom(EnumPaymentService nameService) {
@@ -40,15 +44,16 @@ public class LimeBillingServices {
     }
 
     public void tryRequestInventoryFrom(@NonNull EnumPaymentService service) {
-        if(service == null) return;
-        if(payServices == null) return;
+        if (service == null) return;
+        if (payServices == null) return;
         PayService payService = payServices.get(service);
-
+        payService.tryRequestInventory(activity);
     }
 
     private PayService initServiceByPaymentService(EnumPaymentService paymentService) {
-        PayService payService = new PayService(context, paymentService);
+        PayService payService = new PayService(activity, paymentService);
         return payService;
     }
+
 
 }

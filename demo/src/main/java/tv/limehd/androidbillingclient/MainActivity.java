@@ -35,17 +35,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializationLimeBillingServices() {
-        limeBillingServices = new LimeBillingServices(getApplicationContext());
+        limeBillingServices = new LimeBillingServices(this);
     }
 
     private void verifyAllService() {
         limeBillingServices.verifyExistenceAllService(new ExistenceServicesListener() {
             @Override
             public void callBackExistenceServices(HashMap<EnumPaymentService, Boolean> existing) {
-
-                for (EnumPaymentService service : EnumPaymentService.values()) {
-
-                }
 
                 buttonGoogleSDK.setEnabled(existing.get(EnumPaymentService.google));
                 buttonGoogleSDK.setText("service: " + EnumPaymentService.google.name());
@@ -55,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void setButtonListener() {
         buttonGoogleSDK.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestDataAboutSubscriptions(EnumPaymentService paymentService) {
-        limeBillingServices.requestDataAboutSubscription(paymentService);
+        limeBillingServices.tryRequestInventoryFrom(paymentService);
     }
 
 }

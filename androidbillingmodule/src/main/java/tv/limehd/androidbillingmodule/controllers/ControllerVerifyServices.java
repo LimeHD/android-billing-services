@@ -7,8 +7,8 @@ import java.util.HashMap;
 
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServiceListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServicesListener;
-import tv.limehd.androidbillingmodule.service.PayService;
 import tv.limehd.androidbillingmodule.service.EnumPaymentService;
+import tv.limehd.androidbillingmodule.service.PayService;
 
 public class ControllerVerifyServices {
 
@@ -16,25 +16,24 @@ public class ControllerVerifyServices {
     private HashMap<EnumPaymentService, PayService> services;
     private HashMap<EnumPaymentService, Boolean> checkedServices;
 
-    public ControllerVerifyServices(@NonNull HashMap<EnumPaymentService, PayService> services, @NonNull ExistenceServicesListener existenceServicesListener) throws NullPointerException {
+    public ControllerVerifyServices(@NonNull HashMap<EnumPaymentService, PayService> services, @NonNull ExistenceServicesListener existenceServicesListener) {
         try {
             this.services = services;
             this.existenceServicesListener = existenceServicesListener;
-            controlAllServices();
         } catch (NullPointerException e) {
             e.getMessage();
         }
     }
 
-    public void controlAllServices() throws NullPointerException {
+    public void verifyAllServices() {
         checkedServices = new HashMap<>();
 
         for (EnumPaymentService nameService : EnumPaymentService.values()) {
-            tryControlService(nameService);
+            tryVerifyService(nameService);
         }
     }
 
-    private void tryControlService(EnumPaymentService enumPaymentService) {
+    private void tryVerifyService(EnumPaymentService enumPaymentService) {
         if (services == null) return;
 
         services.get(enumPaymentService).tryVerifyExistence(new ExistenceServiceListener() {

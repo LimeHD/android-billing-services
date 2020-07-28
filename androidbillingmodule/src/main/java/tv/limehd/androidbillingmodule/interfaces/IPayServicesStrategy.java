@@ -1,13 +1,14 @@
 package tv.limehd.androidbillingmodule.interfaces;
 
+import android.app.Activity;
 import android.content.Context;
 
-import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServiceListener;
+import androidx.annotation.NonNull;
 
 public interface IPayServicesStrategy {
     void buy();
 
     boolean isVerifyExistenceService(Context context);
 
-    void requestInventory();
+    void requestInventory(@NonNull Activity activity);
 }

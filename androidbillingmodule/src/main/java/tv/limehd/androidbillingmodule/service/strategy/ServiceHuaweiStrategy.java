@@ -1,13 +1,22 @@
 package tv.limehd.androidbillingmodule.service.strategy;
 
+import android.app.Activity;
 import android.content.Context;
+
+import androidx.annotation.NonNull;
 
 import com.huawei.hms.api.ConnectionResult;
 import com.huawei.hms.api.HuaweiApiAvailability;
 
 import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 
-public class ServiceHuaweiStrategy implements IPayServicesStrategy {
+public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPayServicesStrategy {
+
+
+    public ServiceHuaweiStrategy(@NonNull Activity activity) {
+        super(activity);
+    }
+
     @Override
     public void buy() {
 
@@ -21,7 +30,7 @@ public class ServiceHuaweiStrategy implements IPayServicesStrategy {
     }
 
     @Override
-    public void requestInventory() {
+    public void requestInventory(@NonNull Activity activity) {
 
     }
 
