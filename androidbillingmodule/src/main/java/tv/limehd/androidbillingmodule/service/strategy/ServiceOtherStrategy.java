@@ -6,6 +6,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
+import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 
 public class ServiceOtherStrategy extends ServiceBaseStrategy implements IPayServicesStrategy {
     public ServiceOtherStrategy(@NonNull Activity activity) {
@@ -23,7 +24,7 @@ public class ServiceOtherStrategy extends ServiceBaseStrategy implements IPaySer
     }
 
     @Override
-    public void requestInventory(@NonNull Activity activity) {
+    public void requestInventory(RequestInventoryListener requestInventoryListener) {
 
     }
 

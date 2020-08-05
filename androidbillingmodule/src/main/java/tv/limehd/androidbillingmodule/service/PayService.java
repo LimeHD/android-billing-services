@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServiceListener;
+import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 import tv.limehd.androidbillingmodule.service.strategy.ServiceGoogleStrategy;
 import tv.limehd.androidbillingmodule.service.strategy.ServiceHuaweiStrategy;
 
@@ -46,10 +47,10 @@ public class PayService {
         existenceServiceListener.callBackExistenceService(enumPaymentService, isExistenceService);
     }
 
-    public void tryRequestInventory(@NonNull Activity activity) {
+    public void tryRequestInventory(@NonNull RequestInventoryListener requestInventoryListener) {
         if (servicesStrategy == null) return;
-        Log.e("TEST", "requestInventory ");
-        servicesStrategy.requestInventory(activity);
+        if (requestInventoryListener == null) return;
+        servicesStrategy.requestInventory(requestInventoryListener);
 
     }
 }

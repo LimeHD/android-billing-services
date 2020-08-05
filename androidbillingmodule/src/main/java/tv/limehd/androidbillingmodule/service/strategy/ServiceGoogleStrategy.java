@@ -9,6 +9,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
+import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 
 public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPayServicesStrategy {
 
@@ -30,7 +31,7 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
     }
 
     @Override
-    public void requestInventory(@NonNull Activity activity) {
+    public void requestInventory(RequestInventoryListener requestInventoryListener) {
 
     }
 
