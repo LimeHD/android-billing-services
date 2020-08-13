@@ -17,12 +17,8 @@ public class ControllerVerifyServices {
     private HashMap<EnumPaymentService, Boolean> checkedServices;
 
     public ControllerVerifyServices(@NonNull HashMap<EnumPaymentService, PayService> services, @NonNull ExistenceServicesListener existenceServicesListener) {
-        try {
-            this.services = services;
-            this.existenceServicesListener = existenceServicesListener;
-        } catch (NullPointerException e) {
-            e.getMessage();
-        }
+        this.services = services;
+        this.existenceServicesListener = existenceServicesListener;
     }
 
     public void verifyAllServices() {
