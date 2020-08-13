@@ -19,14 +19,14 @@ public class PayService {
     private Context context;
     private Activity activity;
 
-    public PayService(Activity activity, EnumPaymentService enumPaymentService) {
+    public PayService(@NonNull Activity activity, @NonNull EnumPaymentService enumPaymentService) {
         this.activity = activity;
         this.context = activity;
         this.enumPaymentService = enumPaymentService;
         this.servicesStrategy = initServicesStrategyByPayService(this.enumPaymentService);
     }
 
-    private IPayServicesStrategy initServicesStrategyByPayService(EnumPaymentService paymentServices) {
+    private IPayServicesStrategy initServicesStrategyByPayService(@NonNull EnumPaymentService paymentServices) {
         IPayServicesStrategy iPayServicesStrategy;
         switch (paymentServices) {
             case google:
@@ -41,7 +41,7 @@ public class PayService {
         return iPayServicesStrategy;
     }
 
-    public void tryVerifyExistence(ExistenceServiceListener existenceServiceListener) {
+    public void tryVerifyExistence(@NonNull ExistenceServiceListener existenceServiceListener) {
         if (servicesStrategy == null) return;
         boolean isExistenceService = servicesStrategy.isVerifyExistenceService(context);
         existenceServiceListener.callBackExistenceService(enumPaymentService, isExistenceService);
