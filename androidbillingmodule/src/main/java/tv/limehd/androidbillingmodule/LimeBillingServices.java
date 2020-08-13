@@ -24,7 +24,6 @@ public class LimeBillingServices {
     }
 
     private void init(@NonNull Activity activity) {
-        if (activity == null) return;
         this.context = activity;
         this.activity = activity;
         payServices = new HashMap<>();
