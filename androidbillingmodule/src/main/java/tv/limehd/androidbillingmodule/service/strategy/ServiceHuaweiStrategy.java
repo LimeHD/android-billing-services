@@ -50,10 +50,11 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
 
     @Override
     public void requestInventory(@NonNull final RequestInventoryListener requestInventoryListener) {
-        if(activity == null) return;
+        if(activity == null) {
+            requestInventoryListener.onResult(new ArrayList<String>());
+            return;
+        }
         IapClient iapClient = Iap.getIapClient(activity);
-        if (iapClient == null) return;
-        if(requestInventoryListener == null) return;
         final List<String> productsId = new ArrayList<>();
         Task<OwnedPurchasesResult> task = iapClient.obtainOwnedPurchases(createOwnedPurchasesReq());
         task.addOnSuccessListener(new OnSuccessListener<OwnedPurchasesResult>() {
