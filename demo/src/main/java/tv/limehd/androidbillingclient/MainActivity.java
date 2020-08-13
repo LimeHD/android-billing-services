@@ -4,12 +4,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.HashMap;
+import java.util.List;
 
 import tv.limehd.androidbillingmodule.LimeBillingServices;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServicesListener;
+import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 import tv.limehd.androidbillingmodule.service.EnumPaymentService;
 
 public class MainActivity extends AppCompatActivity {
@@ -70,7 +73,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestDataAboutSubscriptions(EnumPaymentService paymentService) {
-        limeBillingServices.tryRequestInventoryFrom(paymentService);
+        limeBillingServices.tryRequestInventoryFrom(paymentService, new RequestInventoryListener() {
+            @Override
+            public void onResult(@NonNull List<String> inventory) {
+
+            }
+        });
     }
 
 }
