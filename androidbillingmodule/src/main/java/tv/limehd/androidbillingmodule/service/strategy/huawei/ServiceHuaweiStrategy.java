@@ -1,4 +1,4 @@
-package tv.limehd.androidbillingmodule.service.strategy;
+package tv.limehd.androidbillingmodule.service.strategy.huawei;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,6 +28,7 @@ import java.util.List;
 
 import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
+import tv.limehd.androidbillingmodule.service.strategy.ServiceBaseStrategy;
 
 public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPayServicesStrategy {
 
@@ -49,8 +50,7 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
     }
 
     @Override
-    public void requestInventory(RequestInventoryListener requestInventoryListener, List<String> skuList) {
-        //Todo сделать получение инвентаря через huawei
+    public void requestInventory(@NonNull final RequestInventoryListener requestInventoryListener, List<String> skuList) {
         if(activity == null) {
 //            requestInventoryListener.onResult(new ArrayList<String>());
             return;

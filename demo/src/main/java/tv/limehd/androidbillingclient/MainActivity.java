@@ -7,8 +7,10 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import tv.limehd.androidbillingmodule.LimeBillingServices;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServicesListener;
@@ -73,9 +75,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestDataAboutSubscriptions(EnumPaymentService paymentService) {
-        limeBillingServices.tryRequestInventoryFrom(paymentService, new RequestInventoryListener() {
+        ArrayList<String> productIds = new ArrayList<>();
+        productIds.add("pack.id44.v2");//TODO надо передавать список подписок
+        productIds.add("pack.id6.v4");
+        limeBillingServices.tryRequestInventoryFrom(paymentService, productIds, new RequestInventoryListener() {
             @Override
-            public void onResult(@NonNull List<String> inventory) {
+            public void onResult(@NonNull Map<String, Object> skuDetailsMap, @NonNull Map<String, Object> purchaseDetailsMap) {
+
+            }
+
+            @Override
+            public void onErrorRequestInventory(String error) {
 
             }
         });

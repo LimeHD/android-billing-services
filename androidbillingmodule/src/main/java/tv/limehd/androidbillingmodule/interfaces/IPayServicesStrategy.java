@@ -5,6 +5,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import java.util.List;
+
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 
 public interface IPayServicesStrategy {
@@ -12,5 +14,5 @@ public interface IPayServicesStrategy {
 
     boolean isVerifyExistenceService(Context context);
 
-    void requestInventory(RequestInventoryListener requestInventoryListener);
+    void requestInventory(RequestInventoryListener requestInventoryListener, List<String> skuList);
 }

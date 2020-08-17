@@ -5,6 +5,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import java.util.List;
+
 import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 
@@ -24,8 +26,7 @@ public class ServiceOtherStrategy extends ServiceBaseStrategy implements IPaySer
     }
 
     @Override
-    public void requestInventory(RequestInventoryListener requestInventoryListener) {
+    public void requestInventory(RequestInventoryListener requestInventoryListener, List<String> skuList) {
 
     }
-
 }

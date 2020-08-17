@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import java.util.List;
+
 import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 
@@ -31,9 +33,7 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
     }
 
     @Override
-    public void requestInventory(RequestInventoryListener requestInventoryListener) {
+    public void requestInventory(RequestInventoryListener requestInventoryListener, List<String> skuList) {
 
     }
-
-
 }

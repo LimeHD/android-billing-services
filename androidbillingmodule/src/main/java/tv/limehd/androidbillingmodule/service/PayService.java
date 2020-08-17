@@ -2,15 +2,16 @@ package tv.limehd.androidbillingmodule.service;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
+
+import java.util.List;
 
 import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServiceListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
-import tv.limehd.androidbillingmodule.service.strategy.ServiceGoogleStrategy;
-import tv.limehd.androidbillingmodule.service.strategy.ServiceHuaweiStrategy;
+import tv.limehd.androidbillingmodule.service.strategy.google.ServiceGoogleStrategy;
+import tv.limehd.androidbillingmodule.service.strategy.huawei.ServiceHuaweiStrategy;
 
 public class PayService {
 
@@ -47,10 +48,10 @@ public class PayService {
         existenceServiceListener.callBackExistenceService(enumPaymentService, isExistenceService);
     }
 
-    public void tryRequestInventory(@NonNull RequestInventoryListener requestInventoryListener) {
+    public void tryRequestInventory(@NonNull RequestInventoryListener requestInventoryListener, List<String> skuList) {
         if (servicesStrategy == null) return;
         if (requestInventoryListener == null) return;
-        servicesStrategy.requestInventory(requestInventoryListener);
+        servicesStrategy.requestInventory(requestInventoryListener, skuList);
 
     }
 }
