@@ -2,7 +2,6 @@ package tv.limehd.androidbillingmodule.service.strategy.huawei;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -17,9 +16,7 @@ import com.huawei.hms.iap.IapClient;
 import com.huawei.hms.iap.entity.InAppPurchaseData;
 import com.huawei.hms.iap.entity.OwnedPurchasesReq;
 import com.huawei.hms.iap.entity.OwnedPurchasesResult;
-import com.huawei.hms.iap.entity.ProductInfo;
 import com.huawei.hms.iap.entity.ProductInfoReq;
-import com.huawei.hms.iap.entity.ProductInfoResult;
 
 import org.json.JSONException;
 
@@ -85,6 +82,11 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
                 e.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public void setEventCallBacks(Object callBacks) {
+
     }
 
     private ProductInfoReq createProductInfoReq() {

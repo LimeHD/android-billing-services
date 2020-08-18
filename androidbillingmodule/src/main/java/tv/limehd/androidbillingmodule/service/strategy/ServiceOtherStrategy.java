@@ -29,4 +29,9 @@ public class ServiceOtherStrategy extends ServiceBaseStrategy implements IPaySer
     public void requestInventory(RequestInventoryListener requestInventoryListener, List<String> skuList) {
 
     }
+
+    @Override
+    public void setEventCallBacks(Object callBacks) {
+
+    }
 }

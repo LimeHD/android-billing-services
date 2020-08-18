@@ -32,10 +32,12 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
         super(activity);
         skuDetailsMap = new HashMap<>();
         purchaseDetailsMap = new HashMap<>();
+        googleCallBacks = new DefaultGoogleCallBacks().getGoogleCallBacks();
 
         billingClient = BillingClient.newBuilder(context).setListener(this)
                 .enablePendingPurchases()
                 .build();
+        billingClient.startConnection(this);
     }
 
     @Override
@@ -65,6 +67,11 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
         });
     }
 
+    @Override
+    public void setEventCallBacks(Object callBacks) {
+        this.googleCallBacks = (GoogleCallBacks) callBacks;
+    }
+
     //billing client listeners
     @Override
     public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
@@ -88,10 +95,6 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
                 handlePurchase(purchase);
             }
         }
-    }
-
-    public void setGoogleCallBacks(GoogleCallBacks googleCallBacks) {
-        this.googleCallBacks = googleCallBacks;
     }
 
     private List<Purchase> queryPurchases() {

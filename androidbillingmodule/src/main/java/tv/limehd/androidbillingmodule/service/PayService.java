@@ -52,6 +52,10 @@ public class PayService {
         if (servicesStrategy == null) return;
         if (requestInventoryListener == null) return;
         servicesStrategy.requestInventory(requestInventoryListener, skuList);
+    }
 
+    public void setEventCallBacks(@NonNull Object callbacks) {
+        if (servicesStrategy == null) return;
+        servicesStrategy.setEventCallBacks(callbacks);
     }
 }

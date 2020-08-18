@@ -21,12 +21,12 @@ public class LimeBillingServices {
     private Activity activity;
 
     public LimeBillingServices(@NonNull Activity activity) {
-        init(activity);
-    }
-
-    private void init(@NonNull Activity activity) {
         this.context = activity;
         this.activity = activity;
+//        init(activity);
+    }
+
+    public void init() {
         payServices = new HashMap<>();
         for (EnumPaymentService servicesName : EnumPaymentService.values()) {
             payServices.put(servicesName, initServiceByPaymentService(servicesName));
@@ -48,6 +48,12 @@ public class LimeBillingServices {
         if (payServices == null) return;
         PayService payService = payServices.get(service);
         payService.tryRequestInventory(requestInventoryListener, skuList);
+    }
+
+    public void setEventCallBacks(@NonNull EnumPaymentService service, @NonNull Object callbacks) {
+        if (payServices == null) return;
+        PayService payService = payServices.get(service);
+        payService.setEventCallBacks(callbacks);
     }
 
     private PayService initServiceByPaymentService(EnumPaymentService paymentService) {

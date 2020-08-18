@@ -15,4 +15,6 @@ public interface IPayServicesStrategy {
     boolean isVerifyExistenceService(Context context);
 
     void requestInventory(RequestInventoryListener requestInventoryListener, List<String> skuList);
+
+    void setEventCallBacks(Object callBacks);
 }
