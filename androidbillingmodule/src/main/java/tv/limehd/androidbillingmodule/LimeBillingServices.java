@@ -44,7 +44,7 @@ public class LimeBillingServices {
         return payService != null;
     }
 
-    public void tryRequestInventoryFrom(@NonNull EnumPaymentService service, List<String> skuList, @NonNull RequestInventoryListener requestInventoryListener) {
+    public void tryRequestInventoryFrom(@NonNull EnumPaymentService service, @NonNull List<String> skuList, @NonNull RequestInventoryListener requestInventoryListener) {
         if (payServices == null) return;
         PayService payService = payServices.get(service);
         payService.tryRequestInventory(requestInventoryListener, skuList);

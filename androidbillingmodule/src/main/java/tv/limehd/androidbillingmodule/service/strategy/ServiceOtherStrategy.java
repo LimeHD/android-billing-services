@@ -21,7 +21,7 @@ public class ServiceOtherStrategy extends ServiceBaseStrategy implements IPaySer
     }
 
     @Override
-    public boolean isVerifyExistenceService(Context context) {
+    public boolean isVerifyExistenceService(@NonNull Context context) {
         return false;
     }
 

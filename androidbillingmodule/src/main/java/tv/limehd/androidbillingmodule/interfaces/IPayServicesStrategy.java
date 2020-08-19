@@ -12,7 +12,7 @@ import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListe
 public interface IPayServicesStrategy {
     void buy();
 
-    boolean isVerifyExistenceService(Context context);
+    boolean isVerifyExistenceService(@NonNull Context context);
 
     void requestInventory(RequestInventoryListener requestInventoryListener, List<String> skuList);
 

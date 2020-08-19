@@ -40,8 +40,7 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
     }
 
     @Override
-    public boolean isVerifyExistenceService(Context context) {
-        if (context == null) return false;
+    public boolean isVerifyExistenceService(@NonNull Context context) {
         int status = HuaweiApiAvailability.getInstance().isHuaweiMobileServicesAvailable(context);
         return status == ConnectionResult.SUCCESS;
     }

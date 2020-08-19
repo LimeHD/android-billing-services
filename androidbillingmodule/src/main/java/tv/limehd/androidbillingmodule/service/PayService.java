@@ -48,7 +48,7 @@ public class PayService {
         existenceServiceListener.callBackExistenceService(enumPaymentService, isExistenceService);
     }
 
-    public void tryRequestInventory(@NonNull RequestInventoryListener requestInventoryListener, List<String> skuList) {
+    public void tryRequestInventory(@NonNull RequestInventoryListener requestInventoryListener, @NonNull List<String> skuList) {
         if (servicesStrategy == null) return;
         if (requestInventoryListener == null) return;
         servicesStrategy.requestInventory(requestInventoryListener, skuList);

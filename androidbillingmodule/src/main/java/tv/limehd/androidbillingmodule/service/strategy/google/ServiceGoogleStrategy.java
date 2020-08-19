@@ -46,8 +46,7 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
     }
 
     @Override
-    public boolean isVerifyExistenceService(Context context) {
-        if (context == null) return false;
+    public boolean isVerifyExistenceService(@NonNull Context context) {
         int status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
         return status == ConnectionResult.SUCCESS;
     }
