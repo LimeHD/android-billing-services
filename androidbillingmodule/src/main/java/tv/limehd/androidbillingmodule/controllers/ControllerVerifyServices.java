@@ -30,8 +30,6 @@ public class ControllerVerifyServices {
     }
 
     private void tryVerifyService(EnumPaymentService enumPaymentService) {
-        if (services == null) return;
-
         services.get(enumPaymentService).tryVerifyExistence(new ExistenceServiceListener() {
             @Override
             public void callBackExistenceService(EnumPaymentService paymentService, boolean existing) {

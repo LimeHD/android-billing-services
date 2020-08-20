@@ -14,5 +14,4 @@ public class ServiceBaseStrategy {
         this.activity = activity;
         this.context = activity;
     }
-
 }

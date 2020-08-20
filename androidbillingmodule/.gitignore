@@ -1,2 +1,5 @@
 /build
 agconnect-services.json
+.idea
+.gradlew
+.gradlew.bat
