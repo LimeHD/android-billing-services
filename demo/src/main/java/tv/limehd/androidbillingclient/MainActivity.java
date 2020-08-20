@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     private void setGoogleCallBacks(EnumPaymentService paymentService) {
         limeBillingServices.setEventCallBacks(paymentService, new GoogleCallBacks() {
             @Override
-            public void onStartAcknowledgePurchase() {
+            public void onAcknowledgePurchaseStart() {
 
             }
 
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onErrorAcknowledgePurchase(String error) {
+            public void onAcknowledgePurchaseError(String error) {
 
             }
 
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onErrorPurchaseUpdate(String message) {
+            public void onPurchaseUpdateError(String message) {
 
             }
         });
