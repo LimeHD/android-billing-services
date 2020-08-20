@@ -19,8 +19,9 @@ import tv.limehd.androidbillingmodule.service.EnumPaymentService;
 import tv.limehd.androidbillingmodule.service.PurchaseData;
 import tv.limehd.androidbillingmodule.service.SkuDetailData;
 import tv.limehd.androidbillingmodule.service.strategy.google.GoogleCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.huawei.HuaweiPayActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends HuaweiPayActivity {
 
     private Button buttonGoogleSDK;
     private Button buttonHuaweiSDK;
