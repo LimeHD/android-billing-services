@@ -1,6 +1,8 @@
 package tv.limehd.androidbillingmodule.service.strategy.google;
 
-import com.android.billingclient.api.Purchase;
+import java.util.Map;
+
+import tv.limehd.androidbillingmodule.service.PurchaseData;
 
 public class DefaultGoogleCallBacks implements GoogleCallBacks{
     @Override
@@ -9,12 +11,12 @@ public class DefaultGoogleCallBacks implements GoogleCallBacks{
     }
 
     @Override
-    public void onPurchaseAcknowledgeSuccess() {
+    public void onPurchaseAcknowledgeSuccess(PurchaseData purchaseData, Map<String, PurchaseData> purchaseDataMap) {
 
     }
 
     @Override
-    public void onErrorAcknowledgePurchase(Purchase purchase) {
+    public void onErrorAcknowledgePurchase(String error) {
 
     }
 
@@ -33,7 +35,12 @@ public class DefaultGoogleCallBacks implements GoogleCallBacks{
 
     }
 
-    public GoogleCallBacks getGoogleCallBacks(){
+    @Override
+    public void onErrorPurchaseUpdate(String message) {
+
+    }
+
+    public GoogleCallBacks getGoogleCallBacks() {
         return this;
     }
 }

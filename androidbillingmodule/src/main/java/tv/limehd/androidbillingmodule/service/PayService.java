@@ -10,6 +10,7 @@ import java.util.List;
 import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServiceListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
+import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
 import tv.limehd.androidbillingmodule.service.strategy.google.ServiceGoogleStrategy;
 import tv.limehd.androidbillingmodule.service.strategy.huawei.ServiceHuaweiStrategy;
 
@@ -34,6 +35,7 @@ public class PayService {
                 iPayServicesStrategy = new ServiceGoogleStrategy(activity);
                 break;
             case huawei:
+//                iPayServicesStrategy = null;
                 iPayServicesStrategy = new ServiceHuaweiStrategy(activity);
                 break;
             default:
@@ -48,10 +50,20 @@ public class PayService {
         existenceServiceListener.callBackExistenceService(enumPaymentService, isExistenceService);
     }
 
-    public void tryRequestInventory(@NonNull RequestInventoryListener requestInventoryListener, @NonNull List<String> skuList) {
-        if (servicesStrategy == null) return;
-        if (requestInventoryListener == null) return;
+    public void requestInventory(@NonNull RequestInventoryListener requestInventoryListener, @NonNull List<String> skuList) {
+        if (servicesStrategy == null) {
+            requestInventoryListener.onErrorRequestInventory("something wrong happened with initialization service strategy");
+            return;
+        }
         servicesStrategy.requestInventory(requestInventoryListener, skuList);
+    }
+
+    public void requestPurchases(@NonNull RequestPurchasesListener requestPurchasesListener) {
+        if (servicesStrategy == null) {
+            requestPurchasesListener.onErrorRequestPurchases("something wrong happened with initialization service strategy");
+            return;
+        }
+        servicesStrategy.requestPurchases(requestPurchasesListener);
     }
 
     public void setEventCallBacks(@NonNull Object callbacks) {

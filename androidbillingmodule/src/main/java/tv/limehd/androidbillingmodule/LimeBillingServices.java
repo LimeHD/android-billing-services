@@ -11,6 +11,7 @@ import java.util.List;
 import tv.limehd.androidbillingmodule.controllers.ControllerVerifyServices;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServicesListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
+import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
 import tv.limehd.androidbillingmodule.service.EnumPaymentService;
 import tv.limehd.androidbillingmodule.service.PayService;
 
@@ -33,6 +34,11 @@ public class LimeBillingServices {
         }
     }
 
+    public void init(@NonNull EnumPaymentService service) {
+        payServices = new HashMap<>();
+        payServices.put(service, initServiceByPaymentService(service));
+    }
+
     public void verifyExistenceAllService(ExistenceServicesListener existenceServicesListener) {
         ControllerVerifyServices controllerVerifyServices = new ControllerVerifyServices(payServices, existenceServicesListener);
         controllerVerifyServices.verifyAllServices();
@@ -44,16 +50,34 @@ public class LimeBillingServices {
         return payService != null;
     }
 
-    public void tryRequestInventoryFrom(@NonNull EnumPaymentService service, @NonNull List<String> skuList, @NonNull RequestInventoryListener requestInventoryListener) {
+    public void requestInventoryFrom(@NonNull EnumPaymentService service, @NonNull List<String> skuList, @NonNull RequestInventoryListener requestInventoryListener) {
         if (payServices == null) return;
         PayService payService = payServices.get(service);
-        payService.tryRequestInventory(requestInventoryListener, skuList);
+        if (payService != null) {
+            payService.requestInventory(requestInventoryListener, skuList);
+        } else {
+            requestInventoryListener.onErrorRequestInventory(service + " is not init");
+        }
+    }
+
+    public void requestPurchases(@NonNull EnumPaymentService service, @NonNull RequestPurchasesListener requestPurchasesListener) {
+        if (payServices == null) return;
+        PayService payService = payServices.get(service);
+        if (payService != null) {
+            payService.requestPurchases(requestPurchasesListener);
+        } else {
+            requestPurchasesListener.onErrorRequestPurchases(service + " is not init");
+        }
     }
 
     public void setEventCallBacks(@NonNull EnumPaymentService service, @NonNull Object callbacks) {
         if (payServices == null) return;
         PayService payService = payServices.get(service);
-        payService.setEventCallBacks(callbacks);
+        if (payService != null) {
+            payService.setEventCallBacks(callbacks);
+        } else {
+            throw new NullPointerException("Create event callbacks for nonexistence service!!!" + "Service named: " + service);
+        }
     }
 
     private PayService initServiceByPaymentService(EnumPaymentService paymentService) {

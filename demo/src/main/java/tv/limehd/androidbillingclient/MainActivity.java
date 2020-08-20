@@ -1,7 +1,6 @@
 package tv.limehd.androidbillingclient;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -15,7 +14,10 @@ import java.util.Map;
 import tv.limehd.androidbillingmodule.LimeBillingServices;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServicesListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
+import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
 import tv.limehd.androidbillingmodule.service.EnumPaymentService;
+import tv.limehd.androidbillingmodule.service.PurchaseData;
+import tv.limehd.androidbillingmodule.service.SkuDetailData;
 import tv.limehd.androidbillingmodule.service.strategy.google.GoogleCallBacks;
 
 public class MainActivity extends AppCompatActivity {
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 requestDataAboutSubscriptions(EnumPaymentService.google);
+                requestSubscriptions();
             }
         });
 
@@ -82,9 +85,9 @@ public class MainActivity extends AppCompatActivity {
         productIds.add("pack.id44.v2");//TODO надо передавать список подписок
         productIds.add("pack.id6.v4");
 
-        limeBillingServices.tryRequestInventoryFrom(paymentService, productIds, new RequestInventoryListener() {
+        limeBillingServices.requestInventoryFrom(paymentService, productIds, new RequestInventoryListener() {
             @Override
-            public void onResult(@NonNull Map<String, Object> skuDetailsMap, @NonNull Map<String, Object> purchaseDetailsMap) {
+            public void onSuccessRequestInventory(@NonNull Map<String, SkuDetailData> skuDetailsMap) {
 
             }
 
@@ -95,30 +98,55 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void requestSubscriptions() {
+        limeBillingServices.requestPurchases(EnumPaymentService.google, new RequestPurchasesListener() {
+            @Override
+            public void onSuccessRequestPurchases(@NonNull Map<String, PurchaseData> purchaseDetailsMap) {
+
+            }
+
+            @Override
+            public void onErrorRequestPurchases(String message) {
+
+            }
+        });
+    }
+
     private void setGoogleCallBacks(EnumPaymentService paymentService) {
         limeBillingServices.setEventCallBacks(paymentService, new GoogleCallBacks() {
             @Override
             public void onStartAcknowledgePurchase() {
+
             }
 
             @Override
-            public void onPurchaseAcknowledgeSuccess() {
+            public void onPurchaseAcknowledgeSuccess(PurchaseData purchaseData, Map<String, PurchaseData> purchaseDataMap) {
+
             }
 
             @Override
-            public void onErrorAcknowledgePurchase(com.android.billingclient.api.Purchase purchase) {
+            public void onErrorAcknowledgePurchase(String error) {
+
             }
 
             @Override
             public void onBillingSetupFinishedSuccess() {
+
             }
 
             @Override
             public void onBillingSetupFinishedError(String message) {
+
             }
 
             @Override
             public void onBillingServiceDisconnected() {
+
+            }
+
+            @Override
+            public void onErrorPurchaseUpdate(String message) {
+
             }
         });
     }

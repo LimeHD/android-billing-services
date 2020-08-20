@@ -1,17 +1,21 @@
 package tv.limehd.androidbillingmodule.service.strategy.google;
 
-import com.android.billingclient.api.Purchase;
+import java.util.Map;
+
+import tv.limehd.androidbillingmodule.service.PurchaseData;
 
 public interface GoogleCallBacks {
     void onStartAcknowledgePurchase();
 
-    void onPurchaseAcknowledgeSuccess();
+    void onPurchaseAcknowledgeSuccess(PurchaseData purchaseData, Map<String, PurchaseData> purchaseDataMap);
 
-    void onErrorAcknowledgePurchase(Purchase purchase);
+    void onErrorAcknowledgePurchase(String error);
 
     void onBillingSetupFinishedSuccess();
 
     void onBillingSetupFinishedError(String message);
 
     void onBillingServiceDisconnected();
+
+    void onErrorPurchaseUpdate(String message);
 }
