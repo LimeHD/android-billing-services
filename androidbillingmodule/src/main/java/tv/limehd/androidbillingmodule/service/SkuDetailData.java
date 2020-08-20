@@ -1,5 +1,7 @@
 package tv.limehd.androidbillingmodule.service;
 
+import androidx.annotation.NonNull;
+
 public class SkuDetailData {
     private String productId;
     private String price;
@@ -10,7 +12,7 @@ public class SkuDetailData {
     private String description;
     private String originJSON;
 
-    public SkuDetailData(Builder builder) {
+    public SkuDetailData(@NonNull Builder builder) {
         productId = builder.productId;
         price = builder.price;
         priceAmountMicros = builder.priceAmountMicros;

@@ -1,5 +1,7 @@
 package tv.limehd.androidbillingmodule.service;
 
+import androidx.annotation.NonNull;
+
 public class PurchaseData {
     private String orderId;
     private String purchaseToken;
@@ -9,7 +11,7 @@ public class PurchaseData {
     private String packageName;
     private String originJson;
 
-    public PurchaseData(Builder builder){
+    public PurchaseData(@NonNull Builder builder){
         orderId = builder.orderId;
         purchaseToken = builder.purchaseToken;
         purchaseTime = builder.purchaseTime;
