@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import com.android.billingclient.api.AcknowledgePurchaseParams;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
@@ -71,8 +72,16 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
     }
 
     @Override
-    public void buySubscription(String sku) {
+    public void buySubscription(@NonNull String sku) {
+        SkuDetails skuDetails = skuDetailsMap.get(sku);
+        if (skuDetails == null) {
+            throw new NullPointerException("not found pack with name: "+ sku);
+        }
 
+        BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                .setSkuDetails(skuDetails)
+                .build();
+        billingClient.launchBillingFlow(activity, flowParams);
     }
 
     @Override
