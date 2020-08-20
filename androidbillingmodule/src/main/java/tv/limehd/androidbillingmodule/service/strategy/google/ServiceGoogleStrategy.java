@@ -67,7 +67,7 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
                 handlePurchase(purchase);
             }
         } else {
-            googleCallBacks.onErrorPurchaseUpdate(billingResult.getDebugMessage());
+            googleCallBacks.onPurchaseUpdateError(billingResult.getDebugMessage());
         }
     }
 
@@ -133,14 +133,14 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
                     AcknowledgePurchaseParams.newBuilder()
                             .setPurchaseToken(purchase.getPurchaseToken())
                             .build();
-            googleCallBacks.onStartAcknowledgePurchase();
+            googleCallBacks.onAcknowledgePurchaseStart();
             billingClient.acknowledgePurchase(acknowledgePurchaseParams, billingResult -> {
                 if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
                     PurchaseGenerator purchaseGenerator = new PurchaseGenerator();
                     purchaseDetailsMap.put(purchase.getSku(), purchaseGenerator.generatePurchaseData(purchase));
                     googleCallBacks.onPurchaseAcknowledgeSuccess(purchaseGenerator.generatePurchaseData(purchase), purchaseDetailsMap);
                 } else {
-                    googleCallBacks.onErrorAcknowledgePurchase(billingResult.getDebugMessage());
+                    googleCallBacks.onAcknowledgePurchaseError(billingResult.getDebugMessage());
                 }
             });
         }

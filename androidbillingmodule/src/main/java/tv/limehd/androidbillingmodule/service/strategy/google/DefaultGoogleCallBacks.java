@@ -6,7 +6,7 @@ import tv.limehd.androidbillingmodule.service.PurchaseData;
 
 public class DefaultGoogleCallBacks implements GoogleCallBacks{
     @Override
-    public void onStartAcknowledgePurchase() {
+    public void onAcknowledgePurchaseStart() {
 
     }
 
@@ -16,7 +16,7 @@ public class DefaultGoogleCallBacks implements GoogleCallBacks{
     }
 
     @Override
-    public void onErrorAcknowledgePurchase(String error) {
+    public void onAcknowledgePurchaseError(String error) {
 
     }
 
@@ -36,7 +36,7 @@ public class DefaultGoogleCallBacks implements GoogleCallBacks{
     }
 
     @Override
-    public void onErrorPurchaseUpdate(String message) {
+    public void onPurchaseUpdateError(String message) {
 
     }
 

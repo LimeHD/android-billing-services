@@ -5,11 +5,11 @@ import java.util.Map;
 import tv.limehd.androidbillingmodule.service.PurchaseData;
 
 public interface GoogleCallBacks {
-    void onStartAcknowledgePurchase();
+    void onAcknowledgePurchaseStart();
 
     void onPurchaseAcknowledgeSuccess(PurchaseData purchaseData, Map<String, PurchaseData> purchaseDataMap);
 
-    void onErrorAcknowledgePurchase(String error);
+    void onAcknowledgePurchaseError(String error);
 
     void onBillingSetupFinishedSuccess();
 
@@ -17,5 +17,5 @@ public interface GoogleCallBacks {
 
     void onBillingServiceDisconnected();
 
-    void onErrorPurchaseUpdate(String message);
+    void onPurchaseUpdateError(String message);
 }
