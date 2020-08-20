@@ -35,7 +35,7 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
     }
 
     @Override
-    public void buy() {
+    public void buySubscription(String sku) {
 
     }
 
