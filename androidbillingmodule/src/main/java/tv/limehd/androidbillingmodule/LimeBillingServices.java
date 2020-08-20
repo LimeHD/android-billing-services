@@ -45,13 +45,15 @@ public class LimeBillingServices {
     }
 
     public boolean tryBuySubscriptionFrom(EnumPaymentService nameService) {
-        if (payServices == null) return false;
+        if (payServices == null) return false;//TODO пока покупки подписок нет
         PayService payService = payServices.get(nameService);
         return payService != null;
     }
 
     public void requestInventoryFrom(@NonNull EnumPaymentService service, @NonNull List<String> skuList, @NonNull RequestInventoryListener requestInventoryListener) {
-        if (payServices == null) return;
+        if (payServices == null) {
+            requestInventoryListener.onErrorRequestInventory(service + " is not init");
+        }
         PayService payService = payServices.get(service);
         if (payService != null) {
             payService.requestInventory(requestInventoryListener, skuList);
@@ -61,7 +63,9 @@ public class LimeBillingServices {
     }
 
     public void requestPurchases(@NonNull EnumPaymentService service, @NonNull RequestPurchasesListener requestPurchasesListener) {
-        if (payServices == null) return;
+        if (payServices == null) {
+            requestPurchasesListener.onErrorRequestPurchases(service + " is not init");
+        }
         PayService payService = payServices.get(service);
         if (payService != null) {
             payService.requestPurchases(requestPurchasesListener);
@@ -71,7 +75,9 @@ public class LimeBillingServices {
     }
 
     public void setEventCallBacks(@NonNull EnumPaymentService service, @NonNull Object callbacks) {
-        if (payServices == null) return;
+        if (payServices == null) {
+               throw new NullPointerException(service + " is not init");
+        }
         PayService payService = payServices.get(service);
         if (payService != null) {
             payService.setEventCallBacks(callbacks);

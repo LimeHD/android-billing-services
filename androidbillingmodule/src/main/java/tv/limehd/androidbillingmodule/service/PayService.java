@@ -45,7 +45,9 @@ public class PayService {
     }
 
     public void tryVerifyExistence(@NonNull ExistenceServiceListener existenceServiceListener) {
-        if (servicesStrategy == null) return;
+        if (servicesStrategy == null) {
+            throw new NullPointerException("something wrong happened with initialization service strategy");
+        }
         boolean isExistenceService = servicesStrategy.isVerifyExistenceService(context);
         existenceServiceListener.callBackExistenceService(enumPaymentService, isExistenceService);
     }
@@ -67,7 +69,9 @@ public class PayService {
     }
 
     public void setEventCallBacks(@NonNull Object callbacks) {
-        if (servicesStrategy == null) return;
+        if (servicesStrategy == null) {
+            throw new NullPointerException("something wrong happened with initialization service strategy");
+        }
         servicesStrategy.setEventCallBacks(callbacks);
     }
 }
