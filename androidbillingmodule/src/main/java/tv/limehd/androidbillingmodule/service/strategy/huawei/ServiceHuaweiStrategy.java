@@ -10,6 +10,12 @@ import com.huawei.hms.api.HuaweiApiAvailability;
 import com.huawei.hms.iap.Iap;
 import com.huawei.hms.iap.IapClient;
 import com.huawei.hms.iap.entity.OwnedPurchasesReq;
+import com.huawei.hmf.tasks.Task;
+import com.huawei.hms.api.ConnectionResult;
+import com.huawei.hms.api.HuaweiApiAvailability;
+import com.huawei.hms.iap.Iap;
+import com.huawei.hms.iap.entity.ProductInfoReq;
+import com.huawei.hms.iap.entity.ProductInfoResult;
 
 import java.util.List;
 
@@ -19,9 +25,11 @@ import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListe
 import tv.limehd.androidbillingmodule.service.strategy.ServiceBaseStrategy;
 
 public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPayServicesStrategy {
+    private final int AUTO_RENEWABLE_SUBSCRIPTION = 2;
 
     public ServiceHuaweiStrategy(@NonNull Activity activity) {
         super(activity);
+
     }
 
     @Override
@@ -29,16 +37,6 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
 
     }
 
-    //
-//    public ServiceHuaweiStrategy(@NonNull Activity activity) {
-//        super(activity);
-//    }
-//
-//    @Override
-//    public void buy() {
-//
-//    }
-//
     @Override
     public boolean isVerifyExistenceService(@NonNull Context context) {
         int status = HuaweiApiAvailability.getInstance().isHuaweiMobileServicesAvailable(context);
@@ -47,7 +45,14 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
 
     @Override
     public void requestInventory(@NonNull RequestInventoryListener requestInventoryListener, @NonNull List<String> skuList) {
+        ProductInfoReq infoReq = new ProductInfoReq();
+        infoReq.setPriceType(AUTO_RENEWABLE_SUBSCRIPTION);
+        infoReq.setProductIds(skuList);
 
+        Iap.getIapClient(activity).obtainProductInfo(infoReq)
+                .addOnSuccessListener(productInfoResult ->
+                        requestInventoryListener.onSuccessRequestInventory(new SkuDetailMapGenerator().generate(productInfoResult.getProductInfoList())))
+                .addOnFailureListener(e -> requestInventoryListener.onErrorRequestInventory(e.getMessage()));
     }
 
     @Override
