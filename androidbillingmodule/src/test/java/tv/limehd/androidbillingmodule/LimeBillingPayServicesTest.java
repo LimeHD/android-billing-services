@@ -38,7 +38,7 @@ public class LimeBillingPayServicesTest {
     @Test
     public void numberOfCallsBuyMethod() {
        for (EnumPaymentService service : EnumPaymentService.values()) {
-           assertTrue(limeBillingServices.tryBuySubscriptionFrom(service));
+           assertTrue(limeBillingServices.launchBuySubscription(service));
         }
     }
 

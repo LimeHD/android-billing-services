@@ -44,15 +44,21 @@ public class LimeBillingServices {
         controllerVerifyServices.verifyAllServices();
     }
 
-    public boolean tryBuySubscriptionFrom(EnumPaymentService nameService) {
-        if (payServices == null) return false;//TODO пока покупки подписок нет
-        PayService payService = payServices.get(nameService);
-        return payService != null;
+    public void launchBuySubscription(@NonNull EnumPaymentService service, @NonNull String sku) {
+        if (payServices == null) {
+            throw new NullPointerException("pay services is not init");
+        }
+        PayService payService = payServices.get(service);
+        if(payService!=null){
+            payService.buySubscription(sku);
+        } else {
+            throw new NullPointerException(service + " is not init");
+        }
     }
 
     public void requestInventoryFrom(@NonNull EnumPaymentService service, @NonNull List<String> skuList, @NonNull RequestInventoryListener requestInventoryListener) {
         if (payServices == null) {
-            requestInventoryListener.onErrorRequestInventory(service + " is not init");
+            requestInventoryListener.onErrorRequestInventory("pay services is not init");
         }
         PayService payService = payServices.get(service);
         if (payService != null) {
@@ -64,7 +70,7 @@ public class LimeBillingServices {
 
     public void requestPurchases(@NonNull EnumPaymentService service, @NonNull RequestPurchasesListener requestPurchasesListener) {
         if (payServices == null) {
-            requestPurchasesListener.onErrorRequestPurchases(service + " is not init");
+            requestPurchasesListener.onErrorRequestPurchases("pay services is not init");
         }
         PayService payService = payServices.get(service);
         if (payService != null) {
@@ -76,7 +82,7 @@ public class LimeBillingServices {
 
     public void setEventCallBacks(@NonNull EnumPaymentService service, @NonNull Object callbacks) {
         if (payServices == null) {
-               throw new NullPointerException(service + " is not init");
+               throw new NullPointerException("pay services is not init");
         }
         PayService payService = payServices.get(service);
         if (payService != null) {
