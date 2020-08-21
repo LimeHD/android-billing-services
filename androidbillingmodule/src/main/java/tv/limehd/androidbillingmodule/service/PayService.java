@@ -52,6 +52,13 @@ public class PayService {
         existenceServiceListener.callBackExistenceService(enumPaymentService, isExistenceService);
     }
 
+    public void buySubscription(@NonNull String sku){
+        if (servicesStrategy == null) {
+            throw new NullPointerException("something wrong happened with initialization service strategy");
+        }
+        servicesStrategy.buySubscription(sku);
+    }
+
     public void requestInventory(@NonNull RequestInventoryListener requestInventoryListener, @NonNull List<String> skuList) {
         if (servicesStrategy == null) {
             requestInventoryListener.onErrorRequestInventory("something wrong happened with initialization service strategy");
