@@ -5,6 +5,11 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.huawei.hms.api.ConnectionResult;
+import com.huawei.hms.api.HuaweiApiAvailability;
+import com.huawei.hms.iap.Iap;
+import com.huawei.hms.iap.IapClient;
+import com.huawei.hms.iap.entity.OwnedPurchasesReq;
 import com.huawei.hmf.tasks.Task;
 import com.huawei.hms.api.ConnectionResult;
 import com.huawei.hms.api.HuaweiApiAvailability;
@@ -52,33 +57,17 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
 
     @Override
     public void requestPurchases(@NonNull RequestPurchasesListener requestPurchasesListener) {
+        OwnedPurchasesReq ownedPurchasesReq = new OwnedPurchasesReq();
+        ownedPurchasesReq.setPriceType(IapClient.PriceType.IN_APP_SUBSCRIPTION);
 
+        Iap.getIapClient(activity).obtainOwnedPurchases(ownedPurchasesReq)
+                .addOnSuccessListener(result ->
+                        requestPurchasesListener.onSuccessRequestPurchases(new PurchaseGenerator().generateMap(result.getInAppPurchaseDataList())))
+                .addOnFailureListener(e -> requestPurchasesListener.onErrorRequestPurchases(e.getLocalizedMessage()));
     }
 
     @Override
     public void setEventCallBacks(Object callBacks) {
 
     }
-
-//
-//    @Override
-//    public void setEventCallBacks(Object callBacks) {
-//
-//    }
-//
-//    private ProductInfoReq createProductInfoReq() {
-//        ProductInfoReq productInfoReq = new ProductInfoReq();
-//        productInfoReq.setPriceType(IapClient.PriceType.IN_APP_SUBSCRIPTION);
-//        ArrayList<String> productIds = new ArrayList<>();
-//        productIds.add("pack.id44.v2");
-//        productIds.add("pack.id6.v4");
-//        productInfoReq.setProductIds(productIds);
-//        return productInfoReq;
-//    }
-//
-//    private OwnedPurchasesReq createOwnedPurchasesReq() {
-//        OwnedPurchasesReq ownedPurchasesReq = new OwnedPurchasesReq();
-//        ownedPurchasesReq.setPriceType(IapClient.PriceType.IN_APP_SUBSCRIPTION);
-//        return ownedPurchasesReq;
-//    }
 }
