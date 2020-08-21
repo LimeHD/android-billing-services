@@ -3,37 +3,39 @@ package tv.limehd.androidbillingmodule.service.strategy.huawei;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 
 import androidx.annotation.NonNull;
 
-import com.huawei.hmf.tasks.OnSuccessListener;
 import com.huawei.hms.api.ConnectionResult;
 import com.huawei.hms.api.HuaweiApiAvailability;
 import com.huawei.hms.iap.Iap;
 import com.huawei.hms.iap.IapClient;
-import com.huawei.hms.iap.entity.IsEnvReadyResult;
+import com.huawei.hms.iap.entity.OrderStatusCode;
 import com.huawei.hms.iap.entity.OwnedPurchasesReq;
-import com.huawei.hmf.tasks.Task;
-import com.huawei.hms.api.ConnectionResult;
-import com.huawei.hms.api.HuaweiApiAvailability;
-import com.huawei.hms.iap.Iap;
 import com.huawei.hms.iap.entity.ProductInfoReq;
-import com.huawei.hms.iap.entity.ProductInfoResult;
+import com.huawei.hms.iap.entity.PurchaseIntentReq;
+import com.huawei.hms.iap.entity.PurchaseResultInfo;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
+import tv.limehd.androidbillingmodule.service.PurchaseData;
 import tv.limehd.androidbillingmodule.service.strategy.ServiceBaseStrategy;
 
 public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPayServicesStrategy, HuaweiPaymentCallBacks {
-    private final int AUTO_RENEWABLE_SUBSCRIPTION = 2;
     private HuaweiCallBacks huaweiCallBacks;
+    private int REQ_CODE_BUY = 543;
+    private Map<String, PurchaseData> purchaseDataMap;
 
     public ServiceHuaweiStrategy(@NonNull Activity activity) {
         super(activity);
         ((HuaweiPayActivity) activity).setHuaweiPaymentCallBacks(this);
+        purchaseDataMap = new HashMap<>();
         Iap.getIapClient(activity).isEnvReady()
                 .addOnFailureListener(e -> huaweiCallBacks.onHuaweiSetupFinishError(e.getLocalizedMessage()))
                 .addOnSuccessListener(isEnvReadyResult -> huaweiCallBacks.onHuaweiSetupFinishSuccess());
@@ -41,12 +43,39 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
 
     @Override
     public void onResultPay(Intent data, int requestCode) {
-
+        if (requestCode == REQ_CODE_BUY) {
+            PurchaseResultInfo purchaseResultInfo = Iap.getIapClient(activity).parsePurchaseResultInfoFromIntent(data);
+            switch (purchaseResultInfo.getReturnCode()) {
+                case OrderStatusCode.ORDER_STATE_SUCCESS:
+                    PurchaseGenerator purchaseGenerator = new PurchaseGenerator();
+                    PurchaseData purchaseData = purchaseGenerator.generatePurchaseData(purchaseResultInfo.getInAppPurchaseData());
+                    if (purchaseData != null) {
+                        purchaseDataMap.put(purchaseData.getProductId(), purchaseData);
+                    }
+                    huaweiCallBacks.onHuaweiPurchaseSuccess(purchaseData, purchaseDataMap);
+                    break;
+                default:
+                    huaweiCallBacks.onHuaweiPurchaseError("code:" + purchaseResultInfo.getReturnCode() + "message:" + purchaseResultInfo.getErrMsg());
+            }
+        }
     }
 
     @Override
     public void buySubscription(@NonNull String sku) {
+        PurchaseIntentReq purchaseIntentReq = new PurchaseIntentReq();
+        purchaseIntentReq.setProductId(sku);
+        purchaseIntentReq.setPriceType(IapClient.PriceType.IN_APP_SUBSCRIPTION);
 
+        Iap.getIapClient(activity).createPurchaseIntent(purchaseIntentReq)
+                .addOnSuccessListener(purchaseIntentResult -> {
+                    try {
+                        purchaseIntentResult.getStatus().startResolutionForResult(activity, REQ_CODE_BUY);
+                    } catch (IntentSender.SendIntentException e) {
+                        huaweiCallBacks.onHuaweiPurchaseError(e.getLocalizedMessage());
+                        e.printStackTrace();
+                    }
+                })
+                .addOnFailureListener(e -> huaweiCallBacks.onHuaweiPurchaseError(e.getLocalizedMessage()));
     }
 
     @Override
@@ -58,7 +87,7 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
     @Override
     public void requestInventory(@NonNull RequestInventoryListener requestInventoryListener, @NonNull List<String> skuList) {
         ProductInfoReq infoReq = new ProductInfoReq();
-        infoReq.setPriceType(AUTO_RENEWABLE_SUBSCRIPTION);
+        infoReq.setPriceType(IapClient.PriceType.IN_APP_SUBSCRIPTION);
         infoReq.setProductIds(skuList);
 
         Iap.getIapClient(activity).obtainProductInfo(infoReq)
@@ -73,9 +102,10 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
         ownedPurchasesReq.setPriceType(IapClient.PriceType.IN_APP_SUBSCRIPTION);
 
         Iap.getIapClient(activity).obtainOwnedPurchases(ownedPurchasesReq)
-                .addOnSuccessListener(result ->
-                        requestPurchasesListener.onSuccessRequestPurchases(new PurchaseGenerator().generateMap(result.getInAppPurchaseDataList())))
-                .addOnFailureListener(e -> requestPurchasesListener.onErrorRequestPurchases(e.getLocalizedMessage()));
+                .addOnSuccessListener(result -> {
+                    purchaseDataMap = new PurchaseGenerator().generateMap(result.getInAppPurchaseDataList());
+                    requestPurchasesListener.onSuccessRequestPurchases(purchaseDataMap);
+                }).addOnFailureListener(e -> requestPurchasesListener.onErrorRequestPurchases(e.getLocalizedMessage()));
     }
 
     @Override

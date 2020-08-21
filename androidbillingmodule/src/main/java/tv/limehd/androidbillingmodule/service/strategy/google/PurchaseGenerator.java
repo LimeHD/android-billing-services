@@ -28,6 +28,7 @@ public class PurchaseGenerator {
                 .setPurchaseState(purchase.getPurchaseState())
                 .setPurchaseTime(purchase.getPurchaseTime())
                 .setPurchaseToken(purchase.getPurchaseToken())
+                .setProductId(purchase.getSku())
                 .build();
     }
 }
