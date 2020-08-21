@@ -2,6 +2,7 @@ package tv.limehd.androidbillingmodule.service.strategy.huawei;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
@@ -24,11 +25,16 @@ import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListe
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
 import tv.limehd.androidbillingmodule.service.strategy.ServiceBaseStrategy;
 
-public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPayServicesStrategy {
+public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPayServicesStrategy, HuaweiPaymentCallBacks {
     private final int AUTO_RENEWABLE_SUBSCRIPTION = 2;
 
     public ServiceHuaweiStrategy(@NonNull Activity activity) {
         super(activity);
+        ((HuaweiPayActivity) activity).setHuaweiPaymentCallBacks(this);
+    }
+
+    @Override
+    public void onResultPay(Intent data, int requestCode) {
 
     }
 
