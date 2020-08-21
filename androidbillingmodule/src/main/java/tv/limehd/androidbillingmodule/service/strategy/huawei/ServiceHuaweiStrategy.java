@@ -6,10 +6,12 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
+import com.huawei.hmf.tasks.OnSuccessListener;
 import com.huawei.hms.api.ConnectionResult;
 import com.huawei.hms.api.HuaweiApiAvailability;
 import com.huawei.hms.iap.Iap;
 import com.huawei.hms.iap.IapClient;
+import com.huawei.hms.iap.entity.IsEnvReadyResult;
 import com.huawei.hms.iap.entity.OwnedPurchasesReq;
 import com.huawei.hmf.tasks.Task;
 import com.huawei.hms.api.ConnectionResult;
@@ -27,10 +29,14 @@ import tv.limehd.androidbillingmodule.service.strategy.ServiceBaseStrategy;
 
 public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPayServicesStrategy, HuaweiPaymentCallBacks {
     private final int AUTO_RENEWABLE_SUBSCRIPTION = 2;
+    private HuaweiCallBacks huaweiCallBacks;
 
     public ServiceHuaweiStrategy(@NonNull Activity activity) {
         super(activity);
         ((HuaweiPayActivity) activity).setHuaweiPaymentCallBacks(this);
+        Iap.getIapClient(activity).isEnvReady()
+                .addOnFailureListener(e -> huaweiCallBacks.onHuaweiSetupFinishError(e.getLocalizedMessage()))
+                .addOnSuccessListener(isEnvReadyResult -> huaweiCallBacks.onHuaweiSetupFinishSuccess());
     }
 
     @Override
@@ -74,6 +80,6 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
 
     @Override
     public void setEventCallBacks(Object callBacks) {
-
+        this.huaweiCallBacks = (HuaweiCallBacks) callBacks;
     }
 }
