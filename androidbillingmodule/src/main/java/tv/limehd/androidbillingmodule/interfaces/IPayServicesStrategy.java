@@ -8,6 +8,7 @@ import java.util.List;
 
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
+import tv.limehd.androidbillingmodule.service.strategy.PurchaseCallBack;
 
 public interface IPayServicesStrategy {
     void buySubscription(@NonNull String sku);
@@ -18,5 +19,5 @@ public interface IPayServicesStrategy {
 
     void requestPurchases(@NonNull RequestPurchasesListener requestPurchasesListener);
 
-    void setEventCallBacks(Object callBacks);
+    void setPurchaseCallBacks(@NonNull PurchaseCallBack callBack);
 }
