@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import tv.limehd.androidbillingmodule.controllers.ControllerInitialServices;
 import tv.limehd.androidbillingmodule.controllers.ControllerVerifyServices;
@@ -14,18 +15,34 @@ import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListe
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
 import tv.limehd.androidbillingmodule.service.EnumPaymentService;
 import tv.limehd.androidbillingmodule.service.PayService;
+import tv.limehd.androidbillingmodule.service.strategy.PurchaseCallBack;
+import tv.limehd.androidbillingmodule.service.strategy.ServiceSetupCallBack;
 import tv.limehd.androidbillingmodule.support.Ref;
 
 public class LimeBillingServices {
 
     private HashMap<EnumPaymentService, PayService> payServices;
-    private Context context;
+//    private Context context;
     private Activity activity;
 
     public LimeBillingServices(@NonNull Activity activity) {
-        this.context = activity;
         this.activity = activity;
-        this.payServices = new HashMap<>();
+//        this.context = activity;
+//        this.payServices = new HashMap<>();
+    }
+
+    public void init(@NonNull Map<EnumPaymentService, ServiceSetupCallBack> setupCallBackMap) {
+        payServices = new HashMap<>();
+        for (EnumPaymentService servicesName : EnumPaymentService.values()) {
+            if (setupCallBackMap.get(servicesName) != null) {
+                payServices.put(servicesName, initServiceByPaymentService(servicesName, setupCallBackMap.get(servicesName)));
+            }
+        }
+    }
+
+    public void init(@NonNull EnumPaymentService service, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
+        payServices = new HashMap<>();
+        payServices.put(service, initServiceByPaymentService(service, serviceSetupCallBack));
     }
 
     public ControllerInitialServices getControllerInitial() {
@@ -80,15 +97,15 @@ public class LimeBillingServices {
         }
     }
 
-    public void setEventCallBacks(@NonNull EnumPaymentService service, @NonNull Object callbacks) {
+    public void setPurchaseCallBack(@NonNull EnumPaymentService service, @NonNull PurchaseCallBack purchaseCallBack) {
         if (payServices == null) {
             throw new NullPointerException("pay services is not init");
         }
         PayService payService = payServices.get(service);
         if (payService != null) {
-            payService.setEventCallBacks(callbacks);
+            payService.setPurchaseCallBack(purchaseCallBack);
         } else {
-            throw new NullPointerException("Create event callbacks for nonexistence service!!!" + "Service named: " + service);
+            throw new NullPointerException(service + " is not init");
         }
     }
 }

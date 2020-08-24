@@ -11,8 +11,10 @@ import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServiceListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
+import tv.limehd.androidbillingmodule.service.strategy.PurchaseCallBack;
+import tv.limehd.androidbillingmodule.service.strategy.ServiceSetupCallBack;
 import tv.limehd.androidbillingmodule.service.strategy.google.ServiceGoogleStrategy;
-import tv.limehd.androidbillingmodule.service.strategy.huawei.ServiceHuaweiStrategy;
+import tv.limehd.androidbillingmodule.service.strategy.huawei.ServiceHuaweiResultStrategy;
 
 public class PayService {
 
@@ -21,22 +23,22 @@ public class PayService {
     private Context context;
     private Activity activity;
 
-    public PayService(@NonNull Activity activity, @NonNull EnumPaymentService enumPaymentService) {
+    public PayService(@NonNull Activity activity, @NonNull EnumPaymentService enumPaymentService, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
         this.activity = activity;
         this.context = activity;
         this.enumPaymentService = enumPaymentService;
-        this.servicesStrategy = initServicesStrategyByPayService(this.enumPaymentService);
+        this.servicesStrategy = initServicesStrategyByPayService(this.enumPaymentService, serviceSetupCallBack);
     }
 
-    private IPayServicesStrategy initServicesStrategyByPayService(@NonNull EnumPaymentService paymentServices) {
+    private IPayServicesStrategy initServicesStrategyByPayService(@NonNull EnumPaymentService paymentServices, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
         IPayServicesStrategy iPayServicesStrategy;
         switch (paymentServices) {
             case google:
-                iPayServicesStrategy = new ServiceGoogleStrategy(activity);
+                iPayServicesStrategy = new ServiceGoogleStrategy(activity, serviceSetupCallBack);
                 break;
             case huawei:
 //                iPayServicesStrategy = null;
-                iPayServicesStrategy = new ServiceHuaweiStrategy(activity);
+                iPayServicesStrategy = new ServiceHuaweiResultStrategy(activity, serviceSetupCallBack);
                 break;
             default:
                 iPayServicesStrategy = null;
@@ -75,10 +77,10 @@ public class PayService {
         servicesStrategy.requestPurchases(requestPurchasesListener);
     }
 
-    public void setEventCallBacks(@NonNull Object callbacks) {
+    public void setPurchaseCallBack(@NonNull PurchaseCallBack purchaseCallBack) {
         if (servicesStrategy == null) {
             throw new NullPointerException("something wrong happened with initialization service strategy");
         }
-        servicesStrategy.setEventCallBacks(callbacks);
+        servicesStrategy.setPurchaseCallBacks(purchaseCallBack);
     }
 }
