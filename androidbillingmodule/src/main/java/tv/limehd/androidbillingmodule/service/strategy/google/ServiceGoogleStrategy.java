@@ -26,22 +26,27 @@ import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
 import tv.limehd.androidbillingmodule.service.PurchaseData;
+import tv.limehd.androidbillingmodule.service.strategy.PurchaseCallBack;
 import tv.limehd.androidbillingmodule.service.strategy.ServiceBaseStrategy;
-import tv.limehd.androidbillingmodule.service.strategy.google.callBacks.DefaultGoogleCallBacks;
-import tv.limehd.androidbillingmodule.service.strategy.google.callBacks.GoogleCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.ServiceSetupCallBack;
+import tv.limehd.androidbillingmodule.service.strategy.google.callBacks.GoogleBuySubscriptionCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.google.callBacks.GoogleDefaultPaymentCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.google.callBacks.GoogleSetupCallBacks;
 import tv.limehd.androidbillingmodule.service.strategy.google.generators.PurchaseGenerator;
 import tv.limehd.androidbillingmodule.service.strategy.google.generators.SkuDetailMapGenerator;
 
 public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPayServicesStrategy, BillingClientStateListener, PurchasesUpdatedListener {
     private BillingClient billingClient;
-    private GoogleCallBacks googleCallBacks;
     private Map<String, SkuDetails> skuDetailsMap;
     private Map<String, PurchaseData> purchaseDetailsMap;
+    private GoogleSetupCallBacks googleSetupCallBacks;
+    private GoogleBuySubscriptionCallBacks buySubscriptionCallBacks;
 
-    public ServiceGoogleStrategy(@NonNull Activity activity) {
+    public ServiceGoogleStrategy(@NonNull Activity activity, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
         super(activity);
-        googleCallBacks = new DefaultGoogleCallBacks().getGoogleCallBacks();
         purchaseDetailsMap = new HashMap<>();
+        googleSetupCallBacks = (GoogleSetupCallBacks) serviceSetupCallBack;
+        buySubscriptionCallBacks = new GoogleDefaultPaymentCallBacks().getDefaultPaymentCallBacks();
         billingClient = BillingClient.newBuilder(context).setListener(this)
                 .enablePendingPurchases()
                 .build();
@@ -52,15 +57,15 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
     @Override
     public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-            googleCallBacks.onBillingSetupFinishedSuccess();
+            googleSetupCallBacks.onBillingSetupFinishedSuccess();
         } else {
-            googleCallBacks.onBillingSetupFinishedError(billingResult.getDebugMessage());
+            googleSetupCallBacks.onBillingSetupFinishedError(billingResult.getDebugMessage());
         }
     }
 
     @Override
     public void onBillingServiceDisconnected() {
-        googleCallBacks.onBillingServiceDisconnected();
+        googleSetupCallBacks.onBillingServiceDisconnected();
     }
 
     //purchase update listener
@@ -71,7 +76,7 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
                 handlePurchase(purchase);
             }
         } else {
-            googleCallBacks.onPurchaseUpdateError(billingResult.getDebugMessage());
+            buySubscriptionCallBacks.onPurchaseUpdateError(billingResult.getDebugMessage());
         }
     }
 
@@ -122,8 +127,8 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
     }
 
     @Override
-    public void setEventCallBacks(Object callBacks) {
-        this.googleCallBacks = (GoogleCallBacks) callBacks;
+    public void setPurchaseCallBacks(@NonNull PurchaseCallBack callBack) {
+        buySubscriptionCallBacks = (GoogleBuySubscriptionCallBacks) callBack;
     }
 
     private List<Purchase> queryPurchases() {
@@ -137,14 +142,14 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
                     AcknowledgePurchaseParams.newBuilder()
                             .setPurchaseToken(purchase.getPurchaseToken())
                             .build();
-            googleCallBacks.onAcknowledgePurchaseStart();
+            buySubscriptionCallBacks.onAcknowledgePurchaseStart();
             billingClient.acknowledgePurchase(acknowledgePurchaseParams, billingResult -> {
                 if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
                     PurchaseGenerator purchaseGenerator = new PurchaseGenerator();
                     purchaseDetailsMap.put(purchase.getSku(), purchaseGenerator.generatePurchaseData(purchase));
-                    googleCallBacks.onPurchaseAcknowledgeSuccess(purchaseGenerator.generatePurchaseData(purchase), purchaseDetailsMap);
+                    buySubscriptionCallBacks.onPurchaseAcknowledgeSuccess(purchaseGenerator.generatePurchaseData(purchase), purchaseDetailsMap);
                 } else {
-                    googleCallBacks.onAcknowledgePurchaseError(billingResult.getDebugMessage());
+                    buySubscriptionCallBacks.onAcknowledgePurchaseError(billingResult.getDebugMessage());
                 }
             });
         }
