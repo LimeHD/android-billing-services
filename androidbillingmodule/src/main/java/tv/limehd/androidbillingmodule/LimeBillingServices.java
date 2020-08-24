@@ -22,13 +22,13 @@ import tv.limehd.androidbillingmodule.support.Ref;
 public class LimeBillingServices {
 
     private HashMap<EnumPaymentService, PayService> payServices;
-    private Context context;
+//    private Context context;
     private Activity activity;
 
     public LimeBillingServices(@NonNull Activity activity) {
-        this.context = activity;
         this.activity = activity;
-        this.payServices = new HashMap<>();
+//        this.context = activity;
+//        this.payServices = new HashMap<>();
     }
 
     public void init(@NonNull Map<EnumPaymentService, ServiceSetupCallBack> setupCallBackMap) {
