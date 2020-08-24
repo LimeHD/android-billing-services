@@ -11,5 +11,5 @@ public interface HuaweiPurchaseCallBacks extends ServiceSetupCallBack {
 
     void onHuaweiPurchaseSuccess(@Nullable PurchaseData purchaseData, Map<String, PurchaseData> map);
 
-    void onHuaweiPurchaseError(String message);
+    void onHuaweiPurchaseError(@Nullable String message);
 }

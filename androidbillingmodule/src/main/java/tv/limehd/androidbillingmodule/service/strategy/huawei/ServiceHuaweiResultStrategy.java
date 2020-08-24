@@ -66,7 +66,7 @@ public class ServiceHuaweiResultStrategy extends ServiceBaseStrategy implements 
                     huaweiPurchaseCallBacks.onHuaweiPurchaseSuccess(purchaseData, purchaseDataMap);
                     break;
                 default:
-                    huaweiPurchaseCallBacks.onHuaweiPurchaseError("code:" + purchaseResultInfo.getReturnCode() + "message:" + purchaseResultInfo.getErrMsg());
+                    huaweiPurchaseCallBacks.onHuaweiPurchaseError("code:" + purchaseResultInfo.getReturnCode() + "\tmessage: " + purchaseResultInfo.getErrMsg());
             }
         }
     }
