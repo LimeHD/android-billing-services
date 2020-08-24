@@ -29,7 +29,7 @@ import tv.limehd.androidbillingmodule.service.PurchaseData;
 import tv.limehd.androidbillingmodule.service.strategy.PurchaseCallBack;
 import tv.limehd.androidbillingmodule.service.strategy.ServiceBaseStrategy;
 import tv.limehd.androidbillingmodule.service.strategy.ServiceSetupCallBack;
-import tv.limehd.androidbillingmodule.service.strategy.google.callBacks.GoogleBuySubscriptionCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.google.callBacks.GooglePurchaseCallBacks;
 import tv.limehd.androidbillingmodule.service.strategy.google.callBacks.GoogleDefaultPaymentCallBacks;
 import tv.limehd.androidbillingmodule.service.strategy.google.callBacks.GoogleSetupCallBacks;
 import tv.limehd.androidbillingmodule.service.strategy.google.generators.PurchaseGenerator;
@@ -40,7 +40,7 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
     private Map<String, SkuDetails> skuDetailsMap;
     private Map<String, PurchaseData> purchaseDetailsMap;
     private GoogleSetupCallBacks googleSetupCallBacks;
-    private GoogleBuySubscriptionCallBacks buySubscriptionCallBacks;
+    private GooglePurchaseCallBacks buySubscriptionCallBacks;
 
     public ServiceGoogleStrategy(@NonNull Activity activity, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
         super(activity);
@@ -128,7 +128,7 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
 
     @Override
     public void setPurchaseCallBacks(@NonNull PurchaseCallBack callBack) {
-        buySubscriptionCallBacks = (GoogleBuySubscriptionCallBacks) callBack;
+        buySubscriptionCallBacks = (GooglePurchaseCallBacks) callBack;
     }
 
     private List<Purchase> queryPurchases() {
