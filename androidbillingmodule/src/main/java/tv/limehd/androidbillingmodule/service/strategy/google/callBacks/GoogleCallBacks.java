@@ -1,9 +1,9 @@
-package tv.limehd.androidbillingmodule.service.strategy.google;
+package tv.limehd.androidbillingmodule.service.strategy.google.callBacks;
 
 import java.util.Map;
 
 import tv.limehd.androidbillingmodule.service.PurchaseData;
-import tv.limehd.androidbillingmodule.service.strategy.interfaces.ServiceCallBack;
+import tv.limehd.androidbillingmodule.service.strategy.ServiceCallBack;
 
 public interface GoogleCallBacks extends ServiceCallBack {
     void onAcknowledgePurchaseStart();

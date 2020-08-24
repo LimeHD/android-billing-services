@@ -26,6 +26,10 @@ import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListe
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
 import tv.limehd.androidbillingmodule.service.PurchaseData;
 import tv.limehd.androidbillingmodule.service.strategy.ServiceBaseStrategy;
+import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiPaymentCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.huawei.generators.PurchaseGenerator;
+import tv.limehd.androidbillingmodule.service.strategy.huawei.generators.SkuDetailMapGenerator;
 
 public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPayServicesStrategy, HuaweiPaymentCallBacks {
     private HuaweiCallBacks huaweiCallBacks;

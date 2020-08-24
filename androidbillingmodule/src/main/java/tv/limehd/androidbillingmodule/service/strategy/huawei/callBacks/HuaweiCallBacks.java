@@ -1,11 +1,11 @@
-package tv.limehd.androidbillingmodule.service.strategy.huawei;
+package tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks;
 
 import androidx.annotation.Nullable;
 
 import java.util.Map;
 
 import tv.limehd.androidbillingmodule.service.PurchaseData;
-import tv.limehd.androidbillingmodule.service.strategy.interfaces.ServiceCallBack;
+import tv.limehd.androidbillingmodule.service.strategy.ServiceCallBack;
 
 public interface HuaweiCallBacks extends ServiceCallBack {
 
