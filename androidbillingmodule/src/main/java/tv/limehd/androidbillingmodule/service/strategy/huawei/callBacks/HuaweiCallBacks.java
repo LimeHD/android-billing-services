@@ -1,4 +1,4 @@
-package tv.limehd.androidbillingmodule.service.strategy.huawei;
+package tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks;
 
 import androidx.annotation.Nullable;
 

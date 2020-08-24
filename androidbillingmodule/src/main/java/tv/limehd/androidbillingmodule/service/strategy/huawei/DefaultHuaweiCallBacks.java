@@ -3,6 +3,7 @@ package tv.limehd.androidbillingmodule.service.strategy.huawei;
 import java.util.Map;
 
 import tv.limehd.androidbillingmodule.service.PurchaseData;
+import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiCallBacks;
 
 public class DefaultHuaweiCallBacks implements HuaweiCallBacks {
     @Override

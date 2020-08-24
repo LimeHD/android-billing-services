@@ -1,4 +1,4 @@
-package tv.limehd.androidbillingmodule.service.strategy.google;
+package tv.limehd.androidbillingmodule.service.strategy.google.generators;
 
 import com.android.billingclient.api.Purchase;
 

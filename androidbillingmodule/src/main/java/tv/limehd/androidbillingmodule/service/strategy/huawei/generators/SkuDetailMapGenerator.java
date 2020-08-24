@@ -1,4 +1,4 @@
-package tv.limehd.androidbillingmodule.service.strategy.huawei;
+package tv.limehd.androidbillingmodule.service.strategy.huawei.generators;
 
 import com.huawei.hms.iap.entity.ProductInfo;
 

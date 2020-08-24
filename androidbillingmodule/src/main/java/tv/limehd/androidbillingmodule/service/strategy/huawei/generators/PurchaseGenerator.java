@@ -1,4 +1,4 @@
-package tv.limehd.androidbillingmodule.service.strategy.huawei;
+package tv.limehd.androidbillingmodule.service.strategy.huawei.generators;
 
 import org.json.JSONException;
 import org.json.JSONObject;
