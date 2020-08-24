@@ -8,13 +8,13 @@ import androidx.annotation.NonNull;
 import java.util.HashMap;
 import java.util.List;
 
+import tv.limehd.androidbillingmodule.controllers.ControllerInitialServices;
 import tv.limehd.androidbillingmodule.controllers.ControllerVerifyServices;
-import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServiceListener;
-import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServicesListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
 import tv.limehd.androidbillingmodule.service.EnumPaymentService;
 import tv.limehd.androidbillingmodule.service.PayService;
+import tv.limehd.androidbillingmodule.support.Ref;
 
 public class LimeBillingServices {
 
@@ -25,18 +25,15 @@ public class LimeBillingServices {
     public LimeBillingServices(@NonNull Activity activity) {
         this.context = activity;
         this.activity = activity;
+        this.payServices = new HashMap<>();
     }
 
-    public void init() {
-        payServices = new HashMap<>();
-        for (EnumPaymentService servicesName : EnumPaymentService.values()) {
-            payServices.put(servicesName, initServiceByPaymentService(servicesName));
+    public ControllerInitialServices getControllerInitial() {
+        if (activity != null) {
+            return new ControllerInitialServices(activity, new Ref<>(payServices));
+        } else {
+            throw new NullPointerException("activity is null");
         }
-    }
-
-    public void init(@NonNull EnumPaymentService service) {
-        payServices = new HashMap<>();
-        payServices.put(service, initServiceByPaymentService(service));
     }
 
     public ControllerVerifyServices getControllerVerify() {
@@ -94,11 +91,4 @@ public class LimeBillingServices {
             throw new NullPointerException("Create event callbacks for nonexistence service!!!" + "Service named: " + service);
         }
     }
-
-    private PayService initServiceByPaymentService(EnumPaymentService paymentService) {
-        PayService payService = new PayService(activity, paymentService);
-        return payService;
-    }
-
-
 }
