@@ -13,30 +13,30 @@ import tv.limehd.androidbillingmodule.support.Ref;
 public class ControllerInitialServices {
 
     private Activity activity;
-    private Ref<HashMap<EnumPaymentService, PayService>> outPayServices;
+    private Ref<HashMap<EnumPaymentService, PayService>> payServices;
 
-    public ControllerInitialServices(@NonNull Activity activity, Ref<HashMap<EnumPaymentService, PayService>> outPayServices) {
+    public ControllerInitialServices(@NonNull Activity activity, Ref<HashMap<EnumPaymentService, PayService>> payServices) {
         this.activity = activity;
-        this.outPayServices = outPayServices;
+        this.payServices = payServices;
     }
 
     public void initAllServices() {
         initHashMap();
         for (EnumPaymentService servicesName : EnumPaymentService.values()) {
-            outPayServices.ref.put(servicesName, initServiceByPaymentService(servicesName));
+            payServices.ref.put(servicesName, initServiceByPaymentService(servicesName));
         }
     }
 
     public void initSingleService(@NonNull EnumPaymentService service) {
         initHashMap();
-        outPayServices.ref.put(service, initServiceByPaymentService(service));
+        payServices.ref.put(service, initServiceByPaymentService(service));
     }
 
     private void initHashMap() {
-        if (outPayServices.ref == null) {
-            outPayServices.ref = new HashMap<>();
+        if (payServices.ref == null) {
+            payServices.ref = new HashMap<>();
         } else {
-            outPayServices.ref.clear();
+            payServices.ref.clear();
         }
     }
 
