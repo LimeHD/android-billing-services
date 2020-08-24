@@ -10,6 +10,7 @@ public class PurchaseData {
     private boolean isAcknowledged;
     private String packageName;
     private String originJson;
+    private String productId;
 
     public PurchaseData(@NonNull Builder builder){
         orderId = builder.orderId;
@@ -49,6 +50,10 @@ public class PurchaseData {
         return originJson;
     }
 
+    public String getProductId() {
+        return productId;
+    }
+
     public static class Builder {
         private String orderId;
         private String purchaseToken;
@@ -57,6 +62,7 @@ public class PurchaseData {
         private boolean isAcknowledged;
         private String packageName;
         private String originJson;
+        private String productId;
 
         public Builder setOrderId(String orderId) {
             this.orderId = orderId;
@@ -90,6 +96,11 @@ public class PurchaseData {
 
         public Builder setOriginJson(String originJson) {
             this.originJson = originJson;
+            return this;
+        }
+
+        public Builder setProductId(String productId) {
+            this.productId = productId;
             return this;
         }
 
