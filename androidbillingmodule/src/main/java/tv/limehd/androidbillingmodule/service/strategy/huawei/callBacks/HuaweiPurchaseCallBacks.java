@@ -5,15 +5,11 @@ import androidx.annotation.Nullable;
 import java.util.Map;
 
 import tv.limehd.androidbillingmodule.service.PurchaseData;
-import tv.limehd.androidbillingmodule.service.strategy.ServiceCallBack;
+import tv.limehd.androidbillingmodule.service.strategy.ServiceSetupCallBack;
 
-public interface HuaweiCallBacks extends ServiceCallBack {
-
-    void onHuaweiSetupFinishSuccess();
-
-    void onHuaweiSetupFinishError(String message);
+public interface HuaweiPurchaseCallBacks extends ServiceSetupCallBack {
 
     void onHuaweiPurchaseSuccess(@Nullable PurchaseData purchaseData, Map<String, PurchaseData> map);
 
-    void onHuaweiPurchaseError(String message);
+    void onHuaweiPurchaseError(@Nullable String message);
 }
