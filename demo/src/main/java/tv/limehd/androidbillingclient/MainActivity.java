@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +18,7 @@ import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListe
 import tv.limehd.androidbillingmodule.service.EnumPaymentService;
 import tv.limehd.androidbillingmodule.service.PurchaseData;
 import tv.limehd.androidbillingmodule.service.SkuDetailData;
-import tv.limehd.androidbillingmodule.service.strategy.google.GoogleCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.google.callBacks.GoogleCallBacks;
 import tv.limehd.androidbillingmodule.service.strategy.huawei.HuaweiPayActivity;
 
 public class MainActivity extends HuaweiPayActivity {
@@ -47,7 +46,7 @@ public class MainActivity extends HuaweiPayActivity {
     private void initializationLimeBillingServices() {
         limeBillingServices = new LimeBillingServices(this);
         setGoogleCallBacks(EnumPaymentService.google);
-        limeBillingServices.init();
+        limeBillingServices.getControllerInitial().initAllServices();
     }
 
     private void verifyAllService() {
@@ -62,6 +61,7 @@ public class MainActivity extends HuaweiPayActivity {
             }
         });
     }
+
 
     private void verifyService(EnumPaymentService paymentService) {
         limeBillingServices.getControllerVerify().verifyService(paymentService, new ExistenceServiceListener() {

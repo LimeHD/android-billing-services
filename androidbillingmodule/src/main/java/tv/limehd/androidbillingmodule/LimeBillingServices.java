@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import tv.limehd.androidbillingmodule.controllers.ControllerInitialServices;
 import tv.limehd.androidbillingmodule.controllers.ControllerVerifyServices;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
@@ -16,6 +17,7 @@ import tv.limehd.androidbillingmodule.service.EnumPaymentService;
 import tv.limehd.androidbillingmodule.service.PayService;
 import tv.limehd.androidbillingmodule.service.strategy.PurchaseCallBack;
 import tv.limehd.androidbillingmodule.service.strategy.ServiceSetupCallBack;
+import tv.limehd.androidbillingmodule.support.Ref;
 
 public class LimeBillingServices {
 
@@ -26,6 +28,7 @@ public class LimeBillingServices {
     public LimeBillingServices(@NonNull Activity activity) {
         this.context = activity;
         this.activity = activity;
+        this.payServices = new HashMap<>();
     }
 
     public void init(@NonNull Map<EnumPaymentService, ServiceSetupCallBack> setupCallBackMap) {
@@ -40,6 +43,14 @@ public class LimeBillingServices {
     public void init(@NonNull EnumPaymentService service, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
         payServices = new HashMap<>();
         payServices.put(service, initServiceByPaymentService(service, serviceSetupCallBack));
+    }
+
+    public ControllerInitialServices getControllerInitial() {
+        if (activity != null) {
+            return new ControllerInitialServices(activity, new Ref<>(payServices));
+        } else {
+            throw new NullPointerException("activity is null");
+        }
     }
 
     public ControllerVerifyServices getControllerVerify() {
@@ -97,11 +108,4 @@ public class LimeBillingServices {
             throw new NullPointerException(service + " is not init");
         }
     }
-
-    private PayService initServiceByPaymentService(EnumPaymentService paymentService, ServiceSetupCallBack serviceSetupCallBack) {
-        PayService payService = new PayService(activity, paymentService, serviceSetupCallBack);
-        return payService;
-    }
-
-
 }
