@@ -25,25 +25,31 @@ import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
 import tv.limehd.androidbillingmodule.service.PurchaseData;
+import tv.limehd.androidbillingmodule.service.strategy.PurchaseCallBack;
 import tv.limehd.androidbillingmodule.service.strategy.ServiceBaseStrategy;
-import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiCallBacks;
-import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiPaymentCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.ServiceSetupCallBack;
+import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiDefaultPaymentCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiPurchaseCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiResultPaymentCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiSetupCallBacks;
 import tv.limehd.androidbillingmodule.service.strategy.huawei.generators.PurchaseGenerator;
 import tv.limehd.androidbillingmodule.service.strategy.huawei.generators.SkuDetailMapGenerator;
 
-public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPayServicesStrategy, HuaweiPaymentCallBacks {
-    private HuaweiCallBacks huaweiCallBacks;
+public class ServiceHuaweiResultStrategy extends ServiceBaseStrategy implements IPayServicesStrategy, HuaweiResultPaymentCallBacks {
     private int REQ_CODE_BUY = 543;
     private Map<String, PurchaseData> purchaseDataMap;
+    private HuaweiSetupCallBacks huaweiSetupCallBacks;
+    private HuaweiPurchaseCallBacks huaweiPurchaseCallBacks;
 
-    public ServiceHuaweiStrategy(@NonNull Activity activity) {
+    public ServiceHuaweiResultStrategy(@NonNull Activity activity, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
         super(activity);
-        ((HuaweiPayActivity) activity).setHuaweiPaymentCallBacks(this);
-        huaweiCallBacks = new DefaultHuaweiCallBacks().getHuaweiCallBacks();
+        ((HuaweiPayActivity) activity).setHuaweiResultPaymentCallBacks(this);
+        huaweiSetupCallBacks = (HuaweiSetupCallBacks) serviceSetupCallBack;
+        huaweiPurchaseCallBacks = new HuaweiDefaultPaymentCallBacks().getDefaultPaymentCallBacks();
         purchaseDataMap = new HashMap<>();
         Iap.getIapClient(activity).isEnvReady()
-                .addOnFailureListener(e -> huaweiCallBacks.onHuaweiSetupFinishError(e.getLocalizedMessage()))
-                .addOnSuccessListener(isEnvReadyResult -> huaweiCallBacks.onHuaweiSetupFinishSuccess());
+                .addOnFailureListener(e -> huaweiSetupCallBacks.onHuaweiSetupFinishError(e.getLocalizedMessage()))
+                .addOnSuccessListener(isEnvReadyResult -> huaweiSetupCallBacks.onHuaweiSetupFinishSuccess());
     }
 
     @Override
@@ -57,10 +63,10 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
                     if (purchaseData != null) {
                         purchaseDataMap.put(purchaseData.getProductId(), purchaseData);
                     }
-                    huaweiCallBacks.onHuaweiPurchaseSuccess(purchaseData, purchaseDataMap);
+                    huaweiPurchaseCallBacks.onHuaweiPurchaseSuccess(purchaseData, purchaseDataMap);
                     break;
                 default:
-                    huaweiCallBacks.onHuaweiPurchaseError("code:" + purchaseResultInfo.getReturnCode() + "message:" + purchaseResultInfo.getErrMsg());
+                    huaweiPurchaseCallBacks.onHuaweiPurchaseError("code:" + purchaseResultInfo.getReturnCode() + "message:" + purchaseResultInfo.getErrMsg());
             }
         }
     }
@@ -76,11 +82,11 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
                     try {
                         purchaseIntentResult.getStatus().startResolutionForResult(activity, REQ_CODE_BUY);
                     } catch (IntentSender.SendIntentException e) {
-                        huaweiCallBacks.onHuaweiPurchaseError(e.getLocalizedMessage());
+                        huaweiPurchaseCallBacks.onHuaweiPurchaseError(e.getLocalizedMessage());
                         e.printStackTrace();
                     }
                 })
-                .addOnFailureListener(e -> huaweiCallBacks.onHuaweiPurchaseError(e.getLocalizedMessage()));
+                .addOnFailureListener(e -> huaweiPurchaseCallBacks.onHuaweiPurchaseError(e.getLocalizedMessage()));
     }
 
     @Override
@@ -114,7 +120,7 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
     }
 
     @Override
-    public void setEventCallBacks(Object callBacks) {
-        this.huaweiCallBacks = (HuaweiCallBacks) callBacks;
+    public void setPurchaseCallBacks(@NonNull PurchaseCallBack callBack) {
+        huaweiPurchaseCallBacks = (HuaweiPurchaseCallBacks) callBack;
     }
 }
