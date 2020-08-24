@@ -5,9 +5,11 @@ import android.app.Activity;
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import tv.limehd.androidbillingmodule.service.EnumPaymentService;
 import tv.limehd.androidbillingmodule.service.PayService;
+import tv.limehd.androidbillingmodule.service.strategy.ServiceSetupCallBack;
 import tv.limehd.androidbillingmodule.support.Ref;
 
 public class ControllerInitialServices {
@@ -20,16 +22,19 @@ public class ControllerInitialServices {
         this.payServices = payServices;
     }
 
-    public void initAllServices() {
+    public void initServices(@NonNull Map<EnumPaymentService, ServiceSetupCallBack> setupCallBackMap) {
         initHashMap();
-        for (EnumPaymentService servicesName : EnumPaymentService.values()) {
-            payServices.ref.put(servicesName, initServiceByPaymentService(servicesName));
+        for (EnumPaymentService servicesName : setupCallBackMap.keySet()) {
+            ServiceSetupCallBack serviceSetupCallBack = setupCallBackMap.get(servicesName);
+            if(serviceSetupCallBack != null) {
+                payServices.ref.put(servicesName, initServiceByPaymentService(servicesName, serviceSetupCallBack));
+            }
         }
     }
 
-    public void initSingleService(@NonNull EnumPaymentService service) {
+    public void initSingleService(@NonNull EnumPaymentService service, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
         initHashMap();
-        payServices.ref.put(service, initServiceByPaymentService(service));
+        payServices.ref.put(service, initServiceByPaymentService(service, serviceSetupCallBack));
     }
 
     private void initHashMap() {
@@ -40,8 +45,8 @@ public class ControllerInitialServices {
         }
     }
 
-    private PayService initServiceByPaymentService(EnumPaymentService paymentService) {
-        PayService payService = new PayService(activity, paymentService);
+    private PayService initServiceByPaymentService(@NonNull EnumPaymentService paymentService, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
+        PayService payService = new PayService(activity, paymentService, serviceSetupCallBack);
         return payService;
     }
 }

@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,8 +19,12 @@ import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListe
 import tv.limehd.androidbillingmodule.service.EnumPaymentService;
 import tv.limehd.androidbillingmodule.service.PurchaseData;
 import tv.limehd.androidbillingmodule.service.SkuDetailData;
-import tv.limehd.androidbillingmodule.service.strategy.google.callBacks.GoogleCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.ServiceSetupCallBack;
+import tv.limehd.androidbillingmodule.service.strategy.google.callBacks.GooglePurchaseCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.google.callBacks.GoogleSetupCallBacks;
 import tv.limehd.androidbillingmodule.service.strategy.huawei.HuaweiPayActivity;
+import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiPurchaseCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiSetupCallBacks;
 
 public class MainActivity extends HuaweiPayActivity {
 
@@ -45,8 +50,68 @@ public class MainActivity extends HuaweiPayActivity {
 
     private void initializationLimeBillingServices() {
         limeBillingServices = new LimeBillingServices(this);
-        setGoogleCallBacks(EnumPaymentService.google);
-        limeBillingServices.getControllerInitial().initAllServices();
+        limeBillingServices.setPurchaseCallBack(EnumPaymentService.google, new GooglePurchaseCallBacks() {
+            @Override
+            public void onAcknowledgePurchaseStart() {
+
+            }
+
+            @Override
+            public void onPurchaseAcknowledgeSuccess(PurchaseData purchaseData, Map<String, PurchaseData> purchaseDataMap) {
+
+            }
+
+            @Override
+            public void onAcknowledgePurchaseError(String error) {
+
+            }
+
+            @Override
+            public void onPurchaseUpdateError(String message) {
+
+            }
+        });
+        limeBillingServices.setPurchaseCallBack(EnumPaymentService.huawei, new HuaweiPurchaseCallBacks() {
+            @Override
+            public void onHuaweiPurchaseSuccess(@Nullable PurchaseData purchaseData, Map<String, PurchaseData> map) {
+
+            }
+
+            @Override
+            public void onHuaweiPurchaseError(@Nullable String message) {
+
+            }
+        });
+        HashMap<EnumPaymentService, ServiceSetupCallBack> serviceServiceSetupCallBackHashMap = new HashMap<>();
+        serviceServiceSetupCallBackHashMap.put(EnumPaymentService.huawei, new HuaweiSetupCallBacks() {
+            @Override
+            public void onHuaweiSetupFinishSuccess() {
+
+            }
+
+            @Override
+            public void onHuaweiSetupFinishError(@Nullable String message) {
+
+            }
+        });
+        serviceServiceSetupCallBackHashMap.put(EnumPaymentService.google, new GoogleSetupCallBacks() {
+            @Override
+            public void onBillingSetupFinishedSuccess() {
+
+            }
+
+            @Override
+            public void onBillingSetupFinishedError(String message) {
+
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+
+            }
+        });
+
+        limeBillingServices.getControllerInitial().initServices(serviceServiceSetupCallBackHashMap);
     }
 
     private void verifyAllService() {
@@ -120,44 +185,4 @@ public class MainActivity extends HuaweiPayActivity {
             }
         });
     }
-
-    private void setGoogleCallBacks(EnumPaymentService paymentService) {
-        limeBillingServices.setEventCallBacks(paymentService, new GoogleCallBacks() {
-            @Override
-            public void onAcknowledgePurchaseStart() {
-
-            }
-
-            @Override
-            public void onPurchaseAcknowledgeSuccess(PurchaseData purchaseData, Map<String, PurchaseData> purchaseDataMap) {
-
-            }
-
-            @Override
-            public void onAcknowledgePurchaseError(String error) {
-
-            }
-
-            @Override
-            public void onBillingSetupFinishedSuccess() {
-
-            }
-
-            @Override
-            public void onBillingSetupFinishedError(String message) {
-
-            }
-
-            @Override
-            public void onBillingServiceDisconnected() {
-
-            }
-
-            @Override
-            public void onPurchaseUpdateError(String message) {
-
-            }
-        });
-    }
-
 }

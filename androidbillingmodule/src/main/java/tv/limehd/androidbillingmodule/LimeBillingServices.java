@@ -22,27 +22,10 @@ import tv.limehd.androidbillingmodule.support.Ref;
 public class LimeBillingServices {
 
     private HashMap<EnumPaymentService, PayService> payServices;
-//    private Context context;
     private Activity activity;
 
     public LimeBillingServices(@NonNull Activity activity) {
         this.activity = activity;
-//        this.context = activity;
-//        this.payServices = new HashMap<>();
-    }
-
-    public void init(@NonNull Map<EnumPaymentService, ServiceSetupCallBack> setupCallBackMap) {
-        payServices = new HashMap<>();
-        for (EnumPaymentService servicesName : EnumPaymentService.values()) {
-            if (setupCallBackMap.get(servicesName) != null) {
-                payServices.put(servicesName, initServiceByPaymentService(servicesName, setupCallBackMap.get(servicesName)));
-            }
-        }
-    }
-
-    public void init(@NonNull EnumPaymentService service, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
-        payServices = new HashMap<>();
-        payServices.put(service, initServiceByPaymentService(service, serviceSetupCallBack));
     }
 
     public ControllerInitialServices getControllerInitial() {

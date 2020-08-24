@@ -4,7 +4,7 @@ import java.util.Map;
 
 import tv.limehd.androidbillingmodule.service.PurchaseData;
 
-public class GoogleDefaultPaymentCallBacks implements GoogleBuySubscriptionCallBacks {
+public class GoogleDefaultPaymentCallBacks implements GooglePurchaseCallBacks {
     @Override
     public void onAcknowledgePurchaseStart() {
 
@@ -25,7 +25,7 @@ public class GoogleDefaultPaymentCallBacks implements GoogleBuySubscriptionCallB
 
     }
 
-    public GoogleBuySubscriptionCallBacks getDefaultPaymentCallBacks() {
+    public GooglePurchaseCallBacks getDefaultPaymentCallBacks() {
         return this;
     }
 }
