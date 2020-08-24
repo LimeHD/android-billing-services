@@ -35,6 +35,7 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
     public ServiceHuaweiStrategy(@NonNull Activity activity) {
         super(activity);
         ((HuaweiPayActivity) activity).setHuaweiPaymentCallBacks(this);
+        huaweiCallBacks = new DefaultHuaweiCallBacks().getHuaweiCallBacks();
         purchaseDataMap = new HashMap<>();
         Iap.getIapClient(activity).isEnvReady()
                 .addOnFailureListener(e -> huaweiCallBacks.onHuaweiSetupFinishError(e.getLocalizedMessage()))
