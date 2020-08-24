@@ -25,7 +25,7 @@ public class PurchaseGenerator {
         return purchaseMap;
     }
 
-    public PurchaseData generatePurchaseData(JSONObject purchase) {
+    private PurchaseData generatePurchaseData(JSONObject purchase) {
         return new PurchaseData.Builder()
                 .setAcknowledged(purchase.optInt("confirmed") == 1)
                 .setOrderId(purchase.optString("orderId"))
@@ -34,6 +34,26 @@ public class PurchaseGenerator {
                 .setPurchaseState(purchase.optInt("purchaseState"))
                 .setPurchaseTime(purchase.optLong("purchaseTime"))
                 .setPurchaseToken(purchase.optString("purchaseToken"))
+                .setProductId(purchase.optString("productId"))
                 .build();
+    }
+
+    public PurchaseData generatePurchaseData(String purchaseString) {
+        try {
+            JSONObject purchase = new JSONObject(purchaseString);
+            return new PurchaseData.Builder()
+                    .setAcknowledged(purchase.optInt("confirmed") == 1)
+                    .setOrderId(purchase.optString("orderId"))
+                    .setOriginJson(purchase.toString())
+                    .setPackageName(purchase.optString("packageName"))
+                    .setPurchaseState(purchase.optInt("purchaseState"))
+                    .setPurchaseTime(purchase.optLong("purchaseTime"))
+                    .setPurchaseToken(purchase.optString("purchaseToken"))
+                    .setProductId(purchase.optString("productId"))
+                    .build();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
