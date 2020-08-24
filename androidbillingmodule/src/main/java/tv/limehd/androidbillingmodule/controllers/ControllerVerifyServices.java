@@ -16,32 +16,35 @@ public class ControllerVerifyServices {
     private HashMap<EnumPaymentService, PayService> services;
     private HashMap<EnumPaymentService, Boolean> checkedServices;
 
-    public ControllerVerifyServices(@NonNull HashMap<EnumPaymentService, PayService> services, @NonNull ExistenceServicesListener existenceServicesListener) {
+    public ControllerVerifyServices(@NonNull HashMap<EnumPaymentService, PayService> services) {
         this.services = services;
-        this.existenceServicesListener = existenceServicesListener;
     }
 
-    public void verifyAllServices() {
+    public void verifyAllServices(@NonNull ExistenceServicesListener existenceServicesListener) {
         checkedServices = new HashMap<>();
-
+        this.existenceServicesListener = existenceServicesListener;
         for (EnumPaymentService nameService : EnumPaymentService.values()) {
-            tryVerifyService(nameService);
-        }
-    }
+            verifyService(nameService, new ExistenceServiceListener() {
+                @Override
+                public void callBackExistenceService(EnumPaymentService paymentService, boolean existing) {
+                    checkedServices.put(paymentService, existing);
 
-    private void tryVerifyService(EnumPaymentService enumPaymentService) {
-        services.get(enumPaymentService).tryVerifyExistence(new ExistenceServiceListener() {
-            @Override
-            public void callBackExistenceService(EnumPaymentService paymentService, boolean existing) {
-                checkedServices.put(paymentService, existing);
-
-                //Ожидание пока все сервисы кинут калл беск
-                if (checkedServices.size() == EnumPaymentService.values().length) {
-                    if (existenceServicesListener != null) {
+                    //Ожидание пока все сервисы кинут калл беск
+                    if (checkedServices.size() == EnumPaymentService.values().length) {
                         existenceServicesListener.callBackExistenceServices(checkedServices);
                     }
                 }
-            }
-        });
+            });
+        }
     }
+
+    public void verifyService(EnumPaymentService enumPaymentService, @NonNull ExistenceServiceListener existenceServiceListener) {
+        if (services != null && services.get(enumPaymentService) != null) {
+            services.get(enumPaymentService).tryVerifyExistence(existenceServiceListener);
+        } else {
+            throw new NullPointerException("failed to get service " + enumPaymentService.name() + " in controllerVerifyServices");
+        }
+    }
+
+
 }

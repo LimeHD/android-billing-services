@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import tv.limehd.androidbillingmodule.LimeBillingServices;
+import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServiceListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServicesListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
@@ -50,10 +51,9 @@ public class MainActivity extends HuaweiPayActivity {
     }
 
     private void verifyAllService() {
-        limeBillingServices.verifyExistenceAllService(new ExistenceServicesListener() {
+        limeBillingServices.getControllerVerify().verifyAllServices(new ExistenceServicesListener() {
             @Override
             public void callBackExistenceServices(HashMap<EnumPaymentService, Boolean> existing) {
-
                 buttonGoogleSDK.setEnabled(existing.get(EnumPaymentService.google));
                 buttonGoogleSDK.setText("service: " + EnumPaymentService.google.name());
 
@@ -63,6 +63,14 @@ public class MainActivity extends HuaweiPayActivity {
         });
     }
 
+    private void verifyService(EnumPaymentService paymentService) {
+        limeBillingServices.getControllerVerify().verifyService(paymentService, new ExistenceServiceListener() {
+            @Override
+            public void callBackExistenceService(EnumPaymentService paymentService, boolean existing) {
+
+            }
+        });
+    }
 
     private void setButtonListener() {
         buttonGoogleSDK.setOnClickListener(new View.OnClickListener() {
