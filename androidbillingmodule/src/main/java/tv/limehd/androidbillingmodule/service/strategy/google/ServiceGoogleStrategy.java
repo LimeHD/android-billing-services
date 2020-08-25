@@ -2,6 +2,7 @@ package tv.limehd.androidbillingmodule.service.strategy.google;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -129,6 +130,11 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
     @Override
     public void setPurchaseCallBacks(@NonNull PurchaseCallBack callBack) {
         buySubscriptionCallBacks = (GooglePurchaseCallBacks) callBack;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
     }
 
     private List<Purchase> queryPurchases() {

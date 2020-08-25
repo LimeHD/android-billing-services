@@ -2,6 +2,7 @@ package tv.limehd.androidbillingmodule;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
@@ -41,6 +42,14 @@ public class LimeBillingServices {
             return new ControllerVerifyServices(payServices);
         } else {
             throw new NullPointerException("pay services is not init");
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        for (PayService payService : payServices.values()) {
+            if(payService != null) {
+                payService.onActivityResult(requestCode, resultCode, data);
+            }
         }
     }
 

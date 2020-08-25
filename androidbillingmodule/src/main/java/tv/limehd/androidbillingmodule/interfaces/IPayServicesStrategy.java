@@ -1,8 +1,10 @@
 package tv.limehd.androidbillingmodule.interfaces;
 
 import android.content.Context;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.List;
 
@@ -20,4 +22,6 @@ public interface IPayServicesStrategy {
     void requestPurchases(@NonNull RequestPurchasesListener requestPurchasesListener);
 
     void setPurchaseCallBacks(@NonNull PurchaseCallBack callBack);
+
+    void onActivityResult(int requestCode, int resultCode, @Nullable Intent data);
 }
