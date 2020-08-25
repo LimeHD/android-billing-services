@@ -38,11 +38,7 @@ public class LimeBillingServices {
     }
 
     public ControllerVerifyServices getControllerVerify() {
-        if (payServices != null) {
-            return new ControllerVerifyServices(activity);
-        } else {
-            throw new NullPointerException("pay services is not init");
-        }
+        return new ControllerVerifyServices(activity);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
