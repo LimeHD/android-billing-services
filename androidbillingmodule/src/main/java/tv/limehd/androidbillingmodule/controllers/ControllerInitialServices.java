@@ -38,6 +38,11 @@ public class ControllerInitialServices {
         payServices.ref.put(service, initServiceByPaymentService(service, setupBillingInterfaces.getServiceSetupCallback(service)));
     }
 
+    public PayService initSingleEmptyServiceByPaymentService(@NonNull EnumPaymentService paymentService) {
+        PayService payService = new PayService(activity, paymentService);
+        return payService;
+    }
+
     private void initHashMap() {
         if (payServices.ref == null) {
             payServices.ref = new HashMap<>();
@@ -48,6 +53,9 @@ public class ControllerInitialServices {
 
     private PayService initServiceByPaymentService(@NonNull EnumPaymentService paymentService, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
         PayService payService = new PayService(activity, paymentService, serviceSetupCallBack);
+        payService.initServiceStrategy();
         return payService;
     }
+
+
 }

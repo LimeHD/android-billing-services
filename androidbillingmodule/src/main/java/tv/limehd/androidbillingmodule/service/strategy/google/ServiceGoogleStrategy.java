@@ -43,10 +43,21 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
     private GoogleSetupCallBacks googleSetupCallBacks;
     private GooglePurchaseCallBacks buySubscriptionCallBacks;
 
+    public ServiceGoogleStrategy () {
+        super();
+    }
+
+    @Deprecated
     public ServiceGoogleStrategy(@NonNull Activity activity, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
         super(activity);
-        purchaseDetailsMap = new HashMap<>();
+        init(activity, serviceSetupCallBack);
+    }
+
+    @Override
+    public void init(@NonNull Activity activity, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
+        super.init(activity);
         googleSetupCallBacks = (GoogleSetupCallBacks) serviceSetupCallBack;
+        purchaseDetailsMap = new HashMap<>();
         buySubscriptionCallBacks = new GoogleDefaultPaymentCallBacks().getDefaultPaymentCallBacks();
         billingClient = BillingClient.newBuilder(context).setListener(this)
                 .enablePendingPurchases()

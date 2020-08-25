@@ -42,16 +42,28 @@ public class ServiceHuaweiResultStrategy extends ServiceBaseStrategy implements 
     private HuaweiSetupCallBacks huaweiSetupCallBacks;
     private HuaweiPurchaseCallBacks huaweiPurchaseCallBacks;
 
+    public ServiceHuaweiResultStrategy() {
+        super();
+    }
+
+    @Deprecated
     public ServiceHuaweiResultStrategy(@NonNull Activity activity, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
         super(activity);
-        ((HuaweiPayActivity) activity).setHuaweiResultPaymentCallBacks(this);
+        init(activity, serviceSetupCallBack);
+    }
+
+    @Override
+    public void init(@NonNull Activity activity, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
+        super.init(activity);
         huaweiSetupCallBacks = (HuaweiSetupCallBacks) serviceSetupCallBack;
+        ((HuaweiPayActivity) activity).setHuaweiResultPaymentCallBacks(this);
         huaweiPurchaseCallBacks = new HuaweiDefaultPaymentCallBacks().getDefaultPaymentCallBacks();
         purchaseDataMap = new HashMap<>();
         Iap.getIapClient(activity).isEnvReady()
                 .addOnFailureListener(e -> huaweiSetupCallBacks.onHuaweiSetupFinishError(e.getLocalizedMessage()))
                 .addOnSuccessListener(isEnvReadyResult -> huaweiSetupCallBacks.onHuaweiSetupFinishSuccess());
     }
+
 
     @Override
     public void onResultPay(Intent data, int requestCode) {

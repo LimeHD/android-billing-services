@@ -1,5 +1,6 @@
 package tv.limehd.androidbillingmodule.interfaces;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -11,8 +12,11 @@ import java.util.List;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
 import tv.limehd.androidbillingmodule.service.strategy.PurchaseCallBack;
+import tv.limehd.androidbillingmodule.service.strategy.ServiceSetupCallBack;
 
 public interface IPayServicesStrategy {
+    void init(@NonNull Activity activity, @NonNull ServiceSetupCallBack serviceSetupCallBack);
+
     void buySubscription(@NonNull String sku);
 
     boolean isVerifyExistenceService(@NonNull Context context);
