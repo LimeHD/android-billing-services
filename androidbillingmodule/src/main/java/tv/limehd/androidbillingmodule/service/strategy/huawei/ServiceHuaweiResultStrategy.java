@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.huawei.hms.api.ConnectionResult;
 import com.huawei.hms.api.HuaweiApiAvailability;
@@ -36,7 +37,7 @@ import tv.limehd.androidbillingmodule.service.strategy.huawei.generators.Purchas
 import tv.limehd.androidbillingmodule.service.strategy.huawei.generators.SkuDetailMapGenerator;
 
 public class ServiceHuaweiResultStrategy extends ServiceBaseStrategy implements IPayServicesStrategy, HuaweiResultPaymentCallBacks {
-    private int REQ_CODE_BUY = 543;
+    public static final int REQUEST_CODE_BUY_HUAWEI = 543;
     private Map<String, PurchaseData> purchaseDataMap;
     private HuaweiSetupCallBacks huaweiSetupCallBacks;
     private HuaweiPurchaseCallBacks huaweiPurchaseCallBacks;
@@ -54,7 +55,7 @@ public class ServiceHuaweiResultStrategy extends ServiceBaseStrategy implements 
 
     @Override
     public void onResultPay(Intent data, int requestCode) {
-        if (requestCode == REQ_CODE_BUY) {
+        if (requestCode == REQUEST_CODE_BUY_HUAWEI) {
             PurchaseResultInfo purchaseResultInfo = Iap.getIapClient(activity).parsePurchaseResultInfoFromIntent(data);
             switch (purchaseResultInfo.getReturnCode()) {
                 case OrderStatusCode.ORDER_STATE_SUCCESS:
@@ -80,7 +81,7 @@ public class ServiceHuaweiResultStrategy extends ServiceBaseStrategy implements 
         Iap.getIapClient(activity).createPurchaseIntent(purchaseIntentReq)
                 .addOnSuccessListener(purchaseIntentResult -> {
                     try {
-                        purchaseIntentResult.getStatus().startResolutionForResult(activity, REQ_CODE_BUY);
+                        purchaseIntentResult.getStatus().startResolutionForResult(activity, REQUEST_CODE_BUY_HUAWEI);
                     } catch (IntentSender.SendIntentException e) {
                         huaweiPurchaseCallBacks.onHuaweiPurchaseError(e.getLocalizedMessage());
                         e.printStackTrace();
@@ -122,5 +123,10 @@ public class ServiceHuaweiResultStrategy extends ServiceBaseStrategy implements 
     @Override
     public void setPurchaseCallBacks(@NonNull PurchaseCallBack callBack) {
         huaweiPurchaseCallBacks = (HuaweiPurchaseCallBacks) callBack;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        onResultPay(data, requestCode);
     }
 }

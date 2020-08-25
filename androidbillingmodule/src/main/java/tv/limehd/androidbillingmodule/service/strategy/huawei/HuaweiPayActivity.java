@@ -10,6 +10,7 @@ import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiRe
 
 public class HuaweiPayActivity extends AppCompatActivity {
     private HuaweiResultPaymentCallBacks huaweiResultPaymentCallBacks;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,7 +18,9 @@ public class HuaweiPayActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        huaweiResultPaymentCallBacks.onResultPay(data, requestCode);
+        if (huaweiResultPaymentCallBacks != null) {
+            huaweiResultPaymentCallBacks.onResultPay(data, requestCode);
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 

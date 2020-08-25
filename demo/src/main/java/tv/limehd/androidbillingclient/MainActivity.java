@@ -1,5 +1,6 @@
 package tv.limehd.androidbillingclient;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -46,6 +47,12 @@ public class MainActivity extends HuaweiPayActivity {
     private void initializationView() {
         buttonGoogleSDK = findViewById(R.id.button_google_sdk);
         buttonHuaweiSDK = findViewById(R.id.button_huawei_sdk);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        limeBillingServices.onActivityResult(requestCode, resultCode, data);
     }
 
     private void initializationLimeBillingServices() {

@@ -2,6 +2,7 @@ package tv.limehd.androidbillingmodule.service;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
@@ -44,6 +45,13 @@ public class PayService {
                 iPayServicesStrategy = null;
         }
         return iPayServicesStrategy;
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(servicesStrategy == null) {
+            throw new NullPointerException("something wrong happened with initialization service strategy");
+        }
+        servicesStrategy.onActivityResult(requestCode, resultCode, data);
     }
 
     public void tryVerifyExistence(@NonNull ExistenceServiceListener existenceServiceListener) {
