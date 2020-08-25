@@ -21,8 +21,7 @@ public class HuaweiPayActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public HuaweiPayActivity setHuaweiResultPaymentCallBacks(HuaweiResultPaymentCallBacks huaweiResultPaymentCallBacks) {
+    public void setHuaweiResultPaymentCallBacks(HuaweiResultPaymentCallBacks huaweiResultPaymentCallBacks) {
         this.huaweiResultPaymentCallBacks = huaweiResultPaymentCallBacks;
-        return this;
     }
 }
