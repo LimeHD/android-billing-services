@@ -23,32 +23,25 @@ public class PayService {
     private IPayServicesStrategy servicesStrategy;
     private Context context;
     private Activity activity;
+    private ServiceSetupCallBack serviceSetupCallBack;
 
-    public PayService(@NonNull Activity activity, @NonNull EnumPaymentService enumPaymentService, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
-        this.activity = activity;
-        this.context = activity;
-        this.enumPaymentService = enumPaymentService;
-        this.servicesStrategy = initServicesStrategyByPayService(this.enumPaymentService, serviceSetupCallBack);
+    public PayService(@NonNull Activity activity, @NonNull EnumPaymentService enumPaymentService) {
+        initialization(activity, enumPaymentService);
     }
 
-    private IPayServicesStrategy initServicesStrategyByPayService(@NonNull EnumPaymentService paymentServices, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
-        IPayServicesStrategy iPayServicesStrategy;
-        switch (paymentServices) {
-            case google:
-                iPayServicesStrategy = new ServiceGoogleStrategy(activity, serviceSetupCallBack);
-                break;
-            case huawei:
-//                iPayServicesStrategy = null;
-                iPayServicesStrategy = new ServiceHuaweiResultStrategy(activity, serviceSetupCallBack);
-                break;
-            default:
-                iPayServicesStrategy = null;
+    public PayService(@NonNull Activity activity, @NonNull EnumPaymentService enumPaymentService, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
+        initialization(activity, enumPaymentService, serviceSetupCallBack);
+    }
+
+    public void initServiceStrategy() {
+        if (servicesStrategy == null) {
+            throw new NullPointerException("something wrong happened with initialization service strategy");
         }
-        return iPayServicesStrategy;
+        this.servicesStrategy.init(activity, serviceSetupCallBack);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(servicesStrategy == null) {
+        if (servicesStrategy == null) {
             throw new NullPointerException("something wrong happened with initialization service strategy");
         }
         servicesStrategy.onActivityResult(requestCode, resultCode, data);
@@ -62,7 +55,7 @@ public class PayService {
         existenceServiceListener.callBackExistenceService(enumPaymentService, isExistenceService);
     }
 
-    public void buySubscription(@NonNull String sku){
+    public void buySubscription(@NonNull String sku) {
         if (servicesStrategy == null) {
             throw new NullPointerException("something wrong happened with initialization service strategy");
         }
@@ -90,5 +83,32 @@ public class PayService {
             throw new NullPointerException("something wrong happened with initialization service strategy");
         }
         servicesStrategy.setPurchaseCallBacks(purchaseCallBack);
+    }
+
+    private IPayServicesStrategy createServicesStrategyByPayService(@NonNull EnumPaymentService paymentServices) {
+        IPayServicesStrategy iPayServicesStrategy;
+        switch (paymentServices) {
+            case google:
+                iPayServicesStrategy = new ServiceGoogleStrategy();
+                break;
+            case huawei:
+                iPayServicesStrategy = new ServiceHuaweiResultStrategy();
+                break;
+            default:
+                iPayServicesStrategy = null;
+        }
+        return iPayServicesStrategy;
+    }
+
+    private void initialization(@NonNull Activity activity, @NonNull EnumPaymentService enumPaymentService) {
+        this.activity = activity;
+        this.context = activity;
+        this.enumPaymentService = enumPaymentService;
+        this.servicesStrategy = createServicesStrategyByPayService(this.enumPaymentService);
+    }
+
+    private void initialization(@NonNull Activity activity, @NonNull EnumPaymentService enumPaymentService, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
+        initialization(activity, enumPaymentService);
+        this.serviceSetupCallBack = serviceSetupCallBack;
     }
 }

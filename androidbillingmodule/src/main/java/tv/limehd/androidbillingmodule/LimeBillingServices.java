@@ -39,7 +39,7 @@ public class LimeBillingServices {
 
     public ControllerVerifyServices getControllerVerify() {
         if (payServices != null) {
-            return new ControllerVerifyServices(payServices);
+            return new ControllerVerifyServices(activity);
         } else {
             throw new NullPointerException("pay services is not init");
         }

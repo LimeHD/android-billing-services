@@ -1,6 +1,8 @@
 package tv.limehd.androidbillingmodule.controllers;
 
 
+import android.app.Activity;
+
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
@@ -9,6 +11,7 @@ import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServiceListe
 import tv.limehd.androidbillingmodule.interfaces.listeners.ExistenceServicesListener;
 import tv.limehd.androidbillingmodule.service.EnumPaymentService;
 import tv.limehd.androidbillingmodule.service.PayService;
+import tv.limehd.androidbillingmodule.support.Ref;
 
 public class ControllerVerifyServices {
 
@@ -16,8 +19,8 @@ public class ControllerVerifyServices {
     private HashMap<EnumPaymentService, PayService> services;
     private HashMap<EnumPaymentService, Boolean> checkedServices;
 
-    public ControllerVerifyServices(@NonNull HashMap<EnumPaymentService, PayService> services) {
-        this.services = services;
+    public ControllerVerifyServices(@NonNull Activity activity) {
+        services = createEmptyPayServices(activity);
     }
 
     public void verifyAllServices(@NonNull ExistenceServicesListener existenceServicesListener) {
@@ -46,5 +49,12 @@ public class ControllerVerifyServices {
         }
     }
 
-
+    private HashMap<EnumPaymentService, PayService> createEmptyPayServices(@NonNull Activity activity) {
+        this.services = new HashMap<>();
+        for (EnumPaymentService enumPaymentService : EnumPaymentService.values()) {
+            PayService payService = new ControllerInitialServices(activity, new Ref<>(services)).initSingleEmptyServiceByPaymentService(enumPaymentService);
+            services.put(enumPaymentService, payService);
+        }
+        return services;
+    }
 }
