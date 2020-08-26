@@ -85,6 +85,20 @@ public class PayService {
         servicesStrategy.setPurchaseCallBacks(purchaseCallBack);
     }
 
+    public PurchaseData getPurchaseDataBySku(@NonNull String sku){
+        if (servicesStrategy == null) {
+            throw new NullPointerException("something wrong happened with initialization service strategy");
+        }
+        return servicesStrategy.getPurchaseDataBySku(sku);
+    }
+
+    public SkuDetailData getSkuDetailDataBySku(@NonNull String sku){
+        if (servicesStrategy == null) {
+            throw new NullPointerException("something wrong happened with initialization service strategy");
+        }
+        return servicesStrategy.getSkuDetailDataBySku(sku);
+    }
+
     private IPayServicesStrategy createServicesStrategyByPayService(@NonNull EnumPaymentService paymentServices) {
         IPayServicesStrategy iPayServicesStrategy;
         switch (paymentServices) {
