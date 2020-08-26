@@ -20,6 +20,7 @@ public class PurchaseData {
         isAcknowledged = builder.isAcknowledged;
         packageName = builder.packageName;
         originJson = builder.originJson;
+        productId = builder.productId;
     }
 
     public String getOrderId() {
