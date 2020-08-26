@@ -27,6 +27,7 @@ import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
 import tv.limehd.androidbillingmodule.service.PurchaseData;
+import tv.limehd.androidbillingmodule.service.SkuDetailData;
 import tv.limehd.androidbillingmodule.service.strategy.PurchaseCallBack;
 import tv.limehd.androidbillingmodule.service.strategy.ServiceBaseStrategy;
 import tv.limehd.androidbillingmodule.service.strategy.ServiceSetupCallBack;
@@ -39,6 +40,7 @@ import tv.limehd.androidbillingmodule.service.strategy.google.generators.SkuDeta
 public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPayServicesStrategy, BillingClientStateListener, PurchasesUpdatedListener {
     private BillingClient billingClient;
     private Map<String, SkuDetails> skuDetailsMap;
+    private Map<String, SkuDetailData> skuDetailDataMap;
     private Map<String, PurchaseData> purchaseDetailsMap;
     private GoogleSetupCallBacks googleSetupCallBacks;
     private GooglePurchaseCallBacks buySubscriptionCallBacks;
@@ -58,6 +60,8 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
         super.init(activity);
         googleSetupCallBacks = (GoogleSetupCallBacks) serviceSetupCallBack;
         purchaseDetailsMap = new HashMap<>();
+        skuDetailDataMap = new HashMap<>();
+        skuDetailsMap = new HashMap<>();
         buySubscriptionCallBacks = new GoogleDefaultPaymentCallBacks().getDefaultPaymentCallBacks();
         billingClient = BillingClient.newBuilder(context).setListener(this)
                 .enablePendingPurchases()
@@ -119,7 +123,8 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
             if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && list != null) {
                 SkuDetailMapGenerator skuDetailMapGenerator = new SkuDetailMapGenerator();
                 skuDetailsMap = skuDetailMapGenerator.generateLocalMap(list);
-                requestInventoryListener.onSuccessRequestInventory(skuDetailMapGenerator.generate(list));
+                skuDetailDataMap = skuDetailMapGenerator.generate(list);
+                requestInventoryListener.onSuccessRequestInventory(skuDetailDataMap);
             } else {
                 requestInventoryListener.onErrorRequestInventory(billingResult.getDebugMessage());
             }
@@ -146,6 +151,16 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
+    }
+
+    @Override
+    public PurchaseData getPurchaseDataBySku(@NonNull String sku) {
+        return purchaseDetailsMap.get(sku);
+    }
+
+    @Override
+    public SkuDetailData getSkuDetailDataBySku(@NonNull String sku) {
+        return skuDetailDataMap.get(sku);
     }
 
     private List<Purchase> queryPurchases() {

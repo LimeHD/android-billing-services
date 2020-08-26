@@ -26,6 +26,7 @@ import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
 import tv.limehd.androidbillingmodule.service.PurchaseData;
+import tv.limehd.androidbillingmodule.service.SkuDetailData;
 import tv.limehd.androidbillingmodule.service.strategy.PurchaseCallBack;
 import tv.limehd.androidbillingmodule.service.strategy.ServiceBaseStrategy;
 import tv.limehd.androidbillingmodule.service.strategy.ServiceSetupCallBack;
@@ -39,6 +40,7 @@ import tv.limehd.androidbillingmodule.service.strategy.huawei.generators.SkuDeta
 public class ServiceHuaweiResultStrategy extends ServiceBaseStrategy implements IPayServicesStrategy, HuaweiResultPaymentCallBacks {
     public static final int REQUEST_CODE_BUY_HUAWEI = 543;
     private Map<String, PurchaseData> purchaseDataMap;
+    private Map<String, SkuDetailData> skuDetailDataMap;
     private HuaweiSetupCallBacks huaweiSetupCallBacks;
     private HuaweiPurchaseCallBacks huaweiPurchaseCallBacks;
 
@@ -59,6 +61,7 @@ public class ServiceHuaweiResultStrategy extends ServiceBaseStrategy implements 
         ((HuaweiPayActivity) activity).setHuaweiResultPaymentCallBacks(this);
         huaweiPurchaseCallBacks = new HuaweiDefaultPaymentCallBacks().getDefaultPaymentCallBacks();
         purchaseDataMap = new HashMap<>();
+        skuDetailDataMap = new HashMap<>();
         Iap.getIapClient(activity).isEnvReady()
                 .addOnFailureListener(e -> huaweiSetupCallBacks.onHuaweiSetupFinishError(e.getLocalizedMessage()))
                 .addOnSuccessListener(isEnvReadyResult -> huaweiSetupCallBacks.onHuaweiSetupFinishSuccess());
@@ -115,8 +118,10 @@ public class ServiceHuaweiResultStrategy extends ServiceBaseStrategy implements 
         infoReq.setProductIds(skuList);
 
         Iap.getIapClient(activity).obtainProductInfo(infoReq)
-                .addOnSuccessListener(productInfoResult ->
-                        requestInventoryListener.onSuccessRequestInventory(new SkuDetailMapGenerator().generate(productInfoResult.getProductInfoList())))
+                .addOnSuccessListener(productInfoResult -> {
+                    skuDetailDataMap = new SkuDetailMapGenerator().generate(productInfoResult.getProductInfoList());
+                    requestInventoryListener.onSuccessRequestInventory(skuDetailDataMap);
+                })
                 .addOnFailureListener(e -> requestInventoryListener.onErrorRequestInventory(e.getMessage()));
     }
 
@@ -140,5 +145,15 @@ public class ServiceHuaweiResultStrategy extends ServiceBaseStrategy implements 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         onResultPay(data, requestCode);
+    }
+
+    @Override
+    public PurchaseData getPurchaseDataBySku(@NonNull String sku) {
+        return purchaseDataMap.get(sku);
+    }
+
+    @Override
+    public SkuDetailData getSkuDetailDataBySku(@NonNull String sku) {
+        return skuDetailDataMap.get(sku);
     }
 }

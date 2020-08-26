@@ -11,6 +11,8 @@ import java.util.List;
 
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
+import tv.limehd.androidbillingmodule.service.PurchaseData;
+import tv.limehd.androidbillingmodule.service.SkuDetailData;
 import tv.limehd.androidbillingmodule.service.strategy.PurchaseCallBack;
 import tv.limehd.androidbillingmodule.service.strategy.ServiceSetupCallBack;
 
@@ -28,4 +30,8 @@ public interface IPayServicesStrategy {
     void setPurchaseCallBacks(@NonNull PurchaseCallBack callBack);
 
     void onActivityResult(int requestCode, int resultCode, @Nullable Intent data);
+
+    PurchaseData getPurchaseDataBySku(@NonNull String sku);
+
+    SkuDetailData getSkuDetailDataBySku(@NonNull String sku);
 }

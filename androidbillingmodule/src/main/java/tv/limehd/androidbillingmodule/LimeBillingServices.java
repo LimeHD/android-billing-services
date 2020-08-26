@@ -1,14 +1,13 @@
 package tv.limehd.androidbillingmodule;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import tv.limehd.androidbillingmodule.controllers.ControllerInitialServices;
 import tv.limehd.androidbillingmodule.controllers.ControllerVerifyServices;
@@ -16,8 +15,9 @@ import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListe
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
 import tv.limehd.androidbillingmodule.service.EnumPaymentService;
 import tv.limehd.androidbillingmodule.service.PayService;
+import tv.limehd.androidbillingmodule.service.PurchaseData;
+import tv.limehd.androidbillingmodule.service.SkuDetailData;
 import tv.limehd.androidbillingmodule.service.strategy.PurchaseCallBack;
-import tv.limehd.androidbillingmodule.service.strategy.ServiceSetupCallBack;
 import tv.limehd.androidbillingmodule.support.Ref;
 
 public class LimeBillingServices {
@@ -92,6 +92,32 @@ public class LimeBillingServices {
         PayService payService = payServices.get(service);
         if (payService != null) {
             payService.setPurchaseCallBack(purchaseCallBack);
+        } else {
+            throw new NullPointerException(service + " is not init");
+        }
+    }
+
+    @Nullable
+    public PurchaseData getPurchaseDataBySku(@NonNull EnumPaymentService service, @NonNull String sku) {
+        if (payServices == null) {
+            throw new NullPointerException("pay services is not init");
+        }
+        PayService payService = payServices.get(service);
+        if (payService != null) {
+            return payService.getPurchaseDataBySku(sku);
+        } else {
+            throw new NullPointerException(service + " is not init");
+        }
+    }
+
+    @Nullable
+    public SkuDetailData getSkuDetailDataBySku(@NonNull EnumPaymentService service, @NonNull String sku) {
+        if (payServices == null) {
+            throw new NullPointerException("pay services is not init");
+        }
+        PayService payService = payServices.get(service);
+        if (payService != null) {
+            return payService.getSkuDetailDataBySku(sku);
         } else {
             throw new NullPointerException(service + " is not init");
         }
