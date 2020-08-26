@@ -23,7 +23,7 @@ public class ControllerInitialServices {
         this.payServices = payServices;
     }
 
-    public void initServices(@NonNull SetupBillingInterfaces setupBillingInterfaces) {
+    public void initService(@NonNull SetupBillingInterfaces setupBillingInterfaces) {
         initHashMap();
         for (EnumPaymentService servicesName : setupBillingInterfaces.keySet()) {
             ServiceSetupCallBack serviceSetupCallBack = setupBillingInterfaces.getServiceSetupCallback(servicesName);
@@ -33,12 +33,12 @@ public class ControllerInitialServices {
         }
     }
 
-    public void initSingleService(@NonNull EnumPaymentService service, @NonNull SetupBillingInterfaces setupBillingInterfaces) {
-        initHashMap();
-        payServices.ref.put(service, initServiceByPaymentService(service, setupBillingInterfaces.getServiceSetupCallback(service)));
-    }
+//    public void initSingleService(@NonNull EnumPaymentService service, @NonNull SetupBillingInterfaces setupBillingInterfaces) {
+//        initHashMap();
+//        payServices.ref.put(service, initServiceByPaymentService(service, setupBillingInterfaces.getServiceSetupCallback(service)));
+//    }
 
-    public PayService initSingleEmptyServiceByPaymentService(@NonNull EnumPaymentService paymentService) {
+    protected PayService initSingleEmptyServiceByPaymentService(@NonNull EnumPaymentService paymentService) {
         PayService payService = new PayService(activity, paymentService);
         return payService;
     }
