@@ -34,6 +34,7 @@ import tv.limehd.androidbillingmodule.service.strategy.ServiceSetupCallBack;
 import tv.limehd.androidbillingmodule.service.strategy.google.callBacks.GooglePurchaseCallBacks;
 import tv.limehd.androidbillingmodule.service.strategy.google.callBacks.GoogleDefaultPaymentCallBacks;
 import tv.limehd.androidbillingmodule.service.strategy.google.callBacks.GoogleSetupCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.google.generators.GoogleEnumPurchaseGenerator;
 import tv.limehd.androidbillingmodule.service.strategy.google.generators.PurchaseGenerator;
 import tv.limehd.androidbillingmodule.service.strategy.google.generators.SkuDetailMapGenerator;
 
@@ -92,7 +93,7 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
                 handlePurchase(purchase);
             }
         } else {
-            buySubscriptionCallBacks.onPurchaseUpdateError(billingResult.getDebugMessage());
+            buySubscriptionCallBacks.onPurchaseUpdateError(billingResult.getDebugMessage(), new GoogleEnumPurchaseGenerator().generate(billingResult.getResponseCode()));
         }
     }
 
@@ -181,7 +182,7 @@ public class ServiceGoogleStrategy extends ServiceBaseStrategy implements IPaySe
                     purchaseDetailsMap.put(purchase.getSku(), purchaseGenerator.generatePurchaseData(purchase));
                     buySubscriptionCallBacks.onPurchaseAcknowledgeSuccess(purchaseGenerator.generatePurchaseData(purchase), purchaseDetailsMap);
                 } else {
-                    buySubscriptionCallBacks.onAcknowledgePurchaseError(billingResult.getDebugMessage());
+                    buySubscriptionCallBacks.onAcknowledgePurchaseError(billingResult.getDebugMessage(), new GoogleEnumPurchaseGenerator().generate(billingResult.getResponseCode()));
                 }
             });
         }
