@@ -2,6 +2,7 @@ package tv.limehd.androidbillingmodule;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +32,13 @@ public class LimeBillingServices {
 
     public ControllerInitialServices getControllerInitial() {
         if (activity != null) {
-            return new ControllerInitialServices(activity, new Ref<>(payServices));
+
+            if(payServices == null) {
+                payServices = new HashMap<>();
+            }
+            ControllerInitialServices controllerInitialServices = new ControllerInitialServices(activity, new Ref<>(payServices));
+            Log.e("1111", payServices.toString());
+            return controllerInitialServices;
         } else {
             throw new NullPointerException("activity is null");
         }
