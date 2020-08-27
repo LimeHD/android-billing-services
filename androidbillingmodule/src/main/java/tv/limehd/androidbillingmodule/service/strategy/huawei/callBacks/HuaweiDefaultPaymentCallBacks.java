@@ -1,7 +1,11 @@
 package tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.Map;
 
+import tv.limehd.androidbillingmodule.service.EnumPurchaseState;
 import tv.limehd.androidbillingmodule.service.PurchaseData;
 
 public class HuaweiDefaultPaymentCallBacks implements HuaweiPurchaseCallBacks {
@@ -12,7 +16,7 @@ public class HuaweiDefaultPaymentCallBacks implements HuaweiPurchaseCallBacks {
     }
 
     @Override
-    public void onHuaweiPurchaseError(String message) {
+    public void onHuaweiPurchaseError(@Nullable String message, @NonNull EnumPurchaseState enumPurchaseState) {
 
     }
 

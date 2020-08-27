@@ -25,6 +25,7 @@ import java.util.Map;
 import tv.limehd.androidbillingmodule.interfaces.IPayServicesStrategy;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestInventoryListener;
 import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListener;
+import tv.limehd.androidbillingmodule.service.EnumPurchaseState;
 import tv.limehd.androidbillingmodule.service.PurchaseData;
 import tv.limehd.androidbillingmodule.service.SkuDetailData;
 import tv.limehd.androidbillingmodule.service.strategy.PurchaseCallBack;
@@ -34,6 +35,7 @@ import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiDe
 import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiPurchaseCallBacks;
 import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiResultPaymentCallBacks;
 import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiSetupCallBacks;
+import tv.limehd.androidbillingmodule.service.strategy.huawei.generators.HuaweiEnumPurchaseGenerator;
 import tv.limehd.androidbillingmodule.service.strategy.huawei.generators.PurchaseGenerator;
 import tv.limehd.androidbillingmodule.service.strategy.huawei.generators.SkuDetailMapGenerator;
 
@@ -72,17 +74,16 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
     public void onResultPay(Intent data, int requestCode) {
         if (requestCode == REQUEST_CODE_BUY_HUAWEI) {
             PurchaseResultInfo purchaseResultInfo = Iap.getIapClient(activity).parsePurchaseResultInfoFromIntent(data);
-            switch (purchaseResultInfo.getReturnCode()) {
-                case OrderStatusCode.ORDER_STATE_SUCCESS:
-                    PurchaseGenerator purchaseGenerator = new PurchaseGenerator();
-                    PurchaseData purchaseData = purchaseGenerator.generatePurchaseData(purchaseResultInfo.getInAppPurchaseData());
-                    if (purchaseData != null) {
-                        purchaseDataMap.put(purchaseData.getProductId(), purchaseData);
-                    }
-                    huaweiPurchaseCallBacks.onHuaweiPurchaseSuccess(purchaseData, purchaseDataMap);
-                    break;
-                default:
-                    huaweiPurchaseCallBacks.onHuaweiPurchaseError("code:" + purchaseResultInfo.getReturnCode() + "\tmessage: " + purchaseResultInfo.getErrMsg());
+            if (purchaseResultInfo.getReturnCode() == OrderStatusCode.ORDER_STATE_SUCCESS) {
+                PurchaseGenerator purchaseGenerator = new PurchaseGenerator();
+                PurchaseData purchaseData = purchaseGenerator.generatePurchaseData(purchaseResultInfo.getInAppPurchaseData());
+                if (purchaseData != null) {
+                    purchaseDataMap.put(purchaseData.getProductId(), purchaseData);
+                }
+                huaweiPurchaseCallBacks.onHuaweiPurchaseSuccess(purchaseData, purchaseDataMap);
+            } else {
+                huaweiPurchaseCallBacks.onHuaweiPurchaseError("code:" + purchaseResultInfo.getReturnCode() + "\tmessage: " + purchaseResultInfo.getErrMsg(),
+                        new HuaweiEnumPurchaseGenerator().generate(purchaseResultInfo.getReturnCode()));
             }
         }
     }
@@ -98,11 +99,11 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
                     try {
                         purchaseIntentResult.getStatus().startResolutionForResult(activity, REQUEST_CODE_BUY_HUAWEI);
                     } catch (IntentSender.SendIntentException e) {
-                        huaweiPurchaseCallBacks.onHuaweiPurchaseError(e.getLocalizedMessage());
+                        huaweiPurchaseCallBacks.onHuaweiPurchaseError(e.getLocalizedMessage(), EnumPurchaseState.FAILED);
                         e.printStackTrace();
                     }
                 })
-                .addOnFailureListener(e -> huaweiPurchaseCallBacks.onHuaweiPurchaseError(e.getLocalizedMessage()));
+                .addOnFailureListener(e -> huaweiPurchaseCallBacks.onHuaweiPurchaseError(e.getLocalizedMessage(), EnumPurchaseState.FAILED));
     }
 
     @Override
