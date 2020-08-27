@@ -15,7 +15,7 @@ import tv.limehd.androidbillingmodule.interfaces.listeners.RequestPurchasesListe
 import tv.limehd.androidbillingmodule.service.strategy.PurchaseCallBack;
 import tv.limehd.androidbillingmodule.service.strategy.ServiceSetupCallBack;
 import tv.limehd.androidbillingmodule.service.strategy.google.ServiceGoogleStrategy;
-import tv.limehd.androidbillingmodule.service.strategy.huawei.ServiceHuaweiResultStrategy;
+import tv.limehd.androidbillingmodule.service.strategy.huawei.ServiceHuaweiStrategy;
 
 public class PayService {
 
@@ -106,7 +106,7 @@ public class PayService {
                 iPayServicesStrategy = new ServiceGoogleStrategy();
                 break;
             case huawei:
-                iPayServicesStrategy = new ServiceHuaweiResultStrategy();
+                iPayServicesStrategy = new ServiceHuaweiStrategy();
                 break;
             default:
                 iPayServicesStrategy = null;

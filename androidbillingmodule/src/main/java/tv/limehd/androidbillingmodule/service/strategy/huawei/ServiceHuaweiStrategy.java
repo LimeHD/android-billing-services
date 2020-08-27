@@ -37,19 +37,19 @@ import tv.limehd.androidbillingmodule.service.strategy.huawei.callBacks.HuaweiSe
 import tv.limehd.androidbillingmodule.service.strategy.huawei.generators.PurchaseGenerator;
 import tv.limehd.androidbillingmodule.service.strategy.huawei.generators.SkuDetailMapGenerator;
 
-public class ServiceHuaweiResultStrategy extends ServiceBaseStrategy implements IPayServicesStrategy, HuaweiResultPaymentCallBacks {
+public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPayServicesStrategy, HuaweiResultPaymentCallBacks {
     public static final int REQUEST_CODE_BUY_HUAWEI = 543;
     private Map<String, PurchaseData> purchaseDataMap;
     private Map<String, SkuDetailData> skuDetailDataMap;
     private HuaweiSetupCallBacks huaweiSetupCallBacks;
     private HuaweiPurchaseCallBacks huaweiPurchaseCallBacks;
 
-    public ServiceHuaweiResultStrategy() {
+    public ServiceHuaweiStrategy() {
         super();
     }
 
     @Deprecated
-    public ServiceHuaweiResultStrategy(@NonNull Activity activity, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
+    public ServiceHuaweiStrategy(@NonNull Activity activity, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
         super(activity);
         init(activity, serviceSetupCallBack);
     }
