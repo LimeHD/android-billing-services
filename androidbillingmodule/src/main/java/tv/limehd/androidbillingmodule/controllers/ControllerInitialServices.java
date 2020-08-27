@@ -5,7 +5,6 @@ import android.app.Activity;
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import tv.limehd.androidbillingmodule.service.EnumPaymentService;
 import tv.limehd.androidbillingmodule.service.PayService;
@@ -24,7 +23,7 @@ public class ControllerInitialServices {
     }
 
     public void initService(@NonNull SetupBillingInterfaces setupBillingInterfaces) {
-        initHashMap();
+        clearServices();
         for (EnumPaymentService servicesName : setupBillingInterfaces.keySet()) {
             ServiceSetupCallBack serviceSetupCallBack = setupBillingInterfaces.getServiceSetupCallback(servicesName);
             if(serviceSetupCallBack != null) {
@@ -33,19 +32,14 @@ public class ControllerInitialServices {
         }
     }
 
-//    public void initSingleService(@NonNull EnumPaymentService service, @NonNull SetupBillingInterfaces setupBillingInterfaces) {
-//        initHashMap();
-//        payServices.ref.put(service, initServiceByPaymentService(service, setupBillingInterfaces.getServiceSetupCallback(service)));
-//    }
-
     protected PayService initSingleEmptyServiceByPaymentService(@NonNull EnumPaymentService paymentService) {
         PayService payService = new PayService(activity, paymentService);
         return payService;
     }
 
-    private void initHashMap() {
+    private void clearServices() {
         if (payServices.ref == null) {
-            payServices.ref = new HashMap<>();
+            throw new NullPointerException("pay services map is null");
         } else {
             payServices.ref.clear();
         }
