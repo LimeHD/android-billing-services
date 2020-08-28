@@ -12,7 +12,7 @@ public class SkuDetailData {
     private String title;
     private String description;
     private String originJSON;
-    private String promoPeriod;
+    private String freeTrialPeriod;
 
     public SkuDetailData(@NonNull Builder builder) {
         productId = builder.productId;
@@ -23,6 +23,7 @@ public class SkuDetailData {
         title = builder.title;
         description = builder.description;
         originJSON = builder.originJSON;
+        freeTrialPeriod = builder.freeTrialPeriod;
     }
 
     public String getProductId() {
@@ -58,8 +59,8 @@ public class SkuDetailData {
     }
 
     @Nullable
-    public String getPromoPeriod() {
-        return promoPeriod;
+    public String getFreeTrialPeriod() {
+        return freeTrialPeriod;
     }
 
     public static class Builder {
