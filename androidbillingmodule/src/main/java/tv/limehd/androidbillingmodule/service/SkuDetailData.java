@@ -1,6 +1,7 @@
 package tv.limehd.androidbillingmodule.service;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class SkuDetailData {
     private String productId;
@@ -11,6 +12,7 @@ public class SkuDetailData {
     private String title;
     private String description;
     private String originJSON;
+    private String promoPeriod;
 
     public SkuDetailData(@NonNull Builder builder) {
         productId = builder.productId;
@@ -55,6 +57,11 @@ public class SkuDetailData {
         return originJSON;
     }
 
+    @Nullable
+    public String getPromoPeriod() {
+        return promoPeriod;
+    }
+
     public static class Builder {
         private String productId;
         private String price;
@@ -64,6 +71,7 @@ public class SkuDetailData {
         private String title;
         private String description;
         private String originJSON;
+        private String freeTrialPeriod;
 
         public Builder setProductId(String productId) {
             this.productId = productId;
@@ -105,7 +113,12 @@ public class SkuDetailData {
             return this;
         }
 
-        public SkuDetailData build(){
+        public Builder setFreeTrialPeriod(String freeTrialPeriod) {
+            this.freeTrialPeriod = freeTrialPeriod;
+            return this;
+        }
+
+        public SkuDetailData build() {
             return new SkuDetailData(this);
         }
     }

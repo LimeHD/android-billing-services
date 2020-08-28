@@ -27,6 +27,7 @@ public class SkuDetailMapGenerator {
                 .setPrice(skuDetails.getPrice())
                 .setOriginJSON(skuDetails.getOriginalJson())
                 .setProductId(skuDetails.getSku())
+                .setFreeTrialPeriod(skuDetails.getFreeTrialPeriod())
                 .build();
     }
 

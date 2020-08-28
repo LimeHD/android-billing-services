@@ -30,6 +30,7 @@ public class SkuDetailMapGenerator {
                 .setPrice(productInfo.getPrice())
                 .setOriginJSON(generateOriginGSON(productInfo).toString())
                 .setProductId(productInfo.getProductId())
+                .setFreeTrialPeriod(productInfo.getSubFreeTrialPeriod())
                 .build();
     }
 
