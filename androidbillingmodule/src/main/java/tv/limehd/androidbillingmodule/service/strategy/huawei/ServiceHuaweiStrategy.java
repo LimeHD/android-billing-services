@@ -60,7 +60,11 @@ public class ServiceHuaweiStrategy extends ServiceBaseStrategy implements IPaySe
     public void init(@NonNull Activity activity, @NonNull ServiceSetupCallBack serviceSetupCallBack) {
         super.init(activity);
         huaweiSetupCallBacks = (HuaweiSetupCallBacks) serviceSetupCallBack;
-        ((HuaweiPayActivity) activity).setHuaweiResultPaymentCallBacks(this);
+        try {
+            ((HuaweiPayActivity) activity).setHuaweiResultPaymentCallBacks(this);
+        } catch (ClassCastException e){
+            e.printStackTrace();
+        }
         huaweiPurchaseCallBacks = new HuaweiDefaultPaymentCallBacks().getDefaultPaymentCallBacks();
         purchaseDataMap = new HashMap<>();
         skuDetailDataMap = new HashMap<>();
