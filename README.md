@@ -38,6 +38,8 @@ allprojects {
 
 ### 4. Измени Gragle app-module
 ```git
+apply plugin: 'com.huawei.agconnect'
+...
 dependencies {
   implementation project(path: ':androidbillingmodule')
 }
@@ -50,86 +52,52 @@ project(':androidbillingmodule').projectDir = new File(rootDir, 'android-billing
 ```
 
 ## Работа с модулем
-### Инициализация
-#### Инициализация нескольких платежных систем
-```java
-      LimeBillingServices limeBillingServices = new LimeBillingServices(activity);
-      Map<EnumPaymentService, ServiceSetupCallBack> setupCallBackMap = new HashMap<>();
-      setupCallBackMap.put(EnumPaymentService.google, new GoogleSetupCallBacks() {
-            @Override
-            public void onBillingSetupFinishedSuccess() {
-            }
-
-            @Override
-            public void onBillingSetupFinishedError(String message) {
-            }
-
-            @Override
-            public void onBillingServiceDisconnected() {
-            }
-        });
-      setupCallBackMap.put(EnumPaymentService.huawei, new HuaweiSetupCallBacks() {
-            @Override
-            public void onHuaweiSetupFinishSuccess() {    
-            }
-
-            @Override
-            public void onHuaweiSetupFinishError(@Nullable String message) {
-            }
-        });
-        limeBillingServices.getControllerInitial().initServices(setupCallBackMap);
-```
-
-#### Инициализация только одной платежной системы
+### Проверка существования сервисов
+Проверка существования всех сервисов оплаты
 ````java
-      LimeBillingServices limeBillingServices = new LimeBillingServices(activity);
-      limeBillingServices.getControllerInitial().initSingleService(EnumPaymentService.google, new GoogleSetupCallBacks() {
+    limeBillingServices.getControllerVerify().verifyAllServices(new ExistenceServicesListener() {
             @Override
-            public void onBillingSetupFinishedSuccess() {
+            public void callBackExistenceServices(HashMap<EnumPaymentService, Boolean> existing) {
                 
-            }
-
-            @Override
-            public void onBillingSetupFinishedError(String message) {
-
-            }
-
-            @Override
-            public void onBillingServiceDisconnected() {
-
             }
         });
 ````
+Проверка существования конкретного сервиса оплаты
+```java
+     limeBillingServices.getControllerVerify().verifyService(EnumPaymentService.google, new ExistenceServiceListener() {
+            @Override
+            public void callBackExistenceService(EnumPaymentService paymentService, boolean existing) {
+                
+            }
+        });
+```
+### Инициализация
+#### Инициализация нескольких платежных систем
+Инициализация производится с помощью билдера SetupBillingInterfaces
+```java
+      setupBillingInterfaces = new SetupBillingInterfaces.Builder()
+                .setHuaweiSetupCallBacks(new HuaweiSetupCallBacks() {
+                    ...
+                })
+                .setGoogleSetupCallBacks(new GoogleSetupCallBacks() {
+                    ...
+                }).build();
+        limeBillingServices.getControllerInitial().initServices(setupCallBackMap);
+```
 
 ### Запрос инвентаря
 ````java
         List<String> skuList = new ArrayList<>();
         skuList.add("pack");
         limeBillingServices.requestInventoryFrom(EnumPaymentService.google, skuList, new RequestInventoryListener() {
-            @Override
-            public void onSuccessRequestInventory(@NonNull Map<String, SkuDetailData> skuDetailsMap) {
-                
-            }
-
-            @Override
-            public void onErrorRequestInventory(@Nullable String error) {
-
-            }
+            ...
         });
 ````
 
 ### Запрос купленных подписок
 ````java
         limeBillingServices.requestPurchases(EnumPaymentService.google, new RequestPurchasesListener() {
-            @Override
-            public void onSuccessRequestPurchases(@NonNull Map<String, PurchaseData> purchaseDetailsMap) {
-                
-            }
-
-            @Override
-            public void onErrorRequestPurchases(@Nullable String message) {
-
-            }
+            ...
         });
 ````
 
@@ -138,25 +106,7 @@ project(':androidbillingmodule').projectDir = new File(rootDir, 'android-billing
 Для отслеживания статуса совершения подписки необходимо 
 ````java
         limeBillingServices.setPurchaseCallBack(EnumPaymentService.google, new GooglePurchaseCallBacks() {
-            @Override
-            public void onAcknowledgePurchaseStart() {
-                
-            }
-
-            @Override
-            public void onPurchaseAcknowledgeSuccess(PurchaseData purchaseData, Map<String, PurchaseData> purchaseDataMap) {
-
-            }
-
-            @Override
-            public void onAcknowledgePurchaseError(String error) {
-
-            }
-
-            @Override
-            public void onPurchaseUpdateError(String message) {
-
-            }
+            ...
         });
 ````
 Покупка
@@ -170,21 +120,137 @@ public class MainActivity extends HuaweiPayActivity {
 ....
 }
 ````
+Либо вызвать метод limeBillingServices.onActivityResult в onActivityResult активити
+
+````java
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        limeBillingServices.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+````
+
 Для отслеживания статуса совершения подписки необходимо 
 ````java    
         limeBillingServices.setPurchaseCallBack(EnumPaymentService.huawei, new HuaweiPurchaseCallBacks() {
-            @Override
-            public void onHuaweiPurchaseSuccess(@Nullable PurchaseData purchaseData, Map<String, PurchaseData> map) {
-                
-            }
-
-            @Override
-            public void onHuaweiPurchaseError(@Nullable String message) {
-
-            }
+            ...
         });
 ````
 Покупка
 ````java
 limeBillingServices.launchBuySubscription(EnumPaymentService.huawei, sku);
 ````
+
+
+## Классы
+### LimeBillingServices
+Класс для работы с платежным модулем
+#### Методы
+##### getSkuDetailDataBySku(@NonNull EnumPaymentService service, @NonNull String sku)
+Получение информации о подписке по идентификатору
+sku - идентификатор подписки
+
+##### getPurchaseDataBySku(@NonNull EnumPaymentService service, @NonNull String sku)
+Получение информации о купленной подписке по идентификатору
+sku - идентификатор подписки
+
+#### setPurchaseCallBack(@NonNull EnumPaymentService service, @NonNull PurchaseCallBack purchaseCallBack)
+Установка callBack-а на покупку подписки
+
+#### requestPurchases(@NonNull EnumPaymentService service, @NonNull RequestPurchasesListener requestPurchasesListener)
+Запрос к платежной системе за купленными подписками
+
+#### requestInventoryFrom(@NonNull EnumPaymentService service, @NonNull List<String> skuList, @NonNull RequestInventoryListener requestInventoryListener)
+Запрос информации о подписках
+skuList - список идентификаторов подписок
+  
+#### launchBuySubscription(@NonNull EnumPaymentService service, @NonNull String sku)
+Инициализация покупки подписки
+sku - идентификатор подписки
+
+#### onActivityResult(int requestCode, int resultCode, Intent data)
+Только для Huawei оплаты
+Необходимо вызвать в onActivityResult вашего activity. Сообщает Huawei оо успешности покупки
+
+#### getControllerVerify()
+Возвращает контроллер, который проверяет существования сервисов
+
+#### getControllerInitial()
+Возвращает контроллер, который управляет инициализацией сервисов
+
+### SkuDetailData
+Содержит информацию о подписке
+
+### PurchaseData
+Содержит информацию о купленной подписке
+
+## ControllerInitialServices
+
+### initService(@NonNull SetupBillingInterfaces setupBillingInterfaces)
+Инициализирует сервисы согласно билдеру
+
+## ControllerVerifyServices
+
+### verifyAllServices(@NonNull ExistenceServicesListener existenceServicesListener)
+Проверяет существование всех доступных сервисов
+
+### verifyService(EnumPaymentService enumPaymentService, @NonNull ExistenceServiceListener existenceServiceListener)
+Проверяет существование сервиса
+
+
+## Интерфейсы
+
+### PurchaseCallBack
+промежуточный callBack не стоит использовать
+
+### GooglePurchaseCallBacks
+
+#### onAcknowledgePurchaseStart()
+Срабатывает при старте подтверждения покупки
+
+#### onPurchaseAcknowledgeSuccess(PurchaseData purchaseData, Map<String, PurchaseData> purchaseDataMap)
+Срабатывает при успешной покупке подписки
+Map<String, PurchaseData> purchaseDataMap - для доступа к данным используются идентификаторы подписок
+purchaseData - данные о купленной подписке
+
+#### onAcknowledgePurchaseError(String error, EnumPurchaseState enumPurchaseState)
+Срабатывает при неудачном подтверждении подписки
+
+#### onPurchaseUpdateError(String message, EnumPurchaseState enumPurchaseState)
+Срабатывает при неудачном обновлении подписки полсе ее покупки
+
+### HuaweiPurchaseCallBacks
+
+#### onHuaweiPurchaseSuccess(@Nullable PurchaseData purchaseData, Map<String, PurchaseData> map)
+Срабатывает при успешной покупке подписки
+Map<String, PurchaseData> purchaseDataMap - для доступа к данным используются идентификаторы подписок
+purchaseData - данные о купленной подписке
+
+#### onHuaweiPurchaseError(@Nullable String message, @NonNull EnumPurchaseState enumPurchaseState)
+Сребатывает при неудачной покупке подписки
+
+### RequestPurchasesListener
+
+#### onSuccessRequestPurchases(@NonNull Map<String, PurchaseData> purchaseDetailsMap)
+Срабатывает при успешном запросе купленных подписок
+Map<String, PurchaseData> purchaseDetailsMap - для доступа к данным используются идентификаторы подписок
+
+#### onErrorRequestPurchases(@Nullable String message)
+Срабатывает при неуспешном запросе купленных подписок
+
+### RequestInventoryListener
+
+#### onSuccessRequestInventory(@NonNull Map<String, SkuDetailData> skuDetailsMap)
+Срабатывает при успешном запросе информации о подписках
+Map<String, SkuDetailData> skuDetailsMap - для доступа к данным используются идентификаторы подписок
+
+#### void onErrorRequestInventory(@Nullable String error)
+Срабатывает при неуспешном запросе информации о подписках
+
+### ExistenceServiceListener
+#### callBackExistenceService(EnumPaymentService paymentService, boolean existing)
+Возвращается после проверки существования сервиса
+
+### ExistenceServicesListener
+#### callBackExistenceServices(HashMap<EnumPaymentService, Boolean> existing)
+Возвращается после проверки существования всех сервисов
