@@ -148,10 +148,14 @@ limeBillingServices.launchBuySubscription(EnumPaymentService.huawei, sku);
 
 #### getSkuDetailDataBySku(@NonNull EnumPaymentService service, @NonNull String sku)
 Получение информации о подписке по идентификатору
+
+
 sku - идентификатор подписки
 
 #### getPurchaseDataBySku(@NonNull EnumPaymentService service, @NonNull String sku)
 Получение информации о купленной подписке по идентификатору
+
+
 sku - идентификатор подписки
 
 #### setPurchaseCallBack(@NonNull EnumPaymentService service, @NonNull PurchaseCallBack purchaseCallBack)
@@ -162,6 +166,8 @@ sku - идентификатор подписки
 
 #### requestInventoryFrom(@NonNull EnumPaymentService service, @NonNull List<String> skuList, @NonNull RequestInventoryListener requestInventoryListener)
 Запрос информации о подписках
+
+
 skuList - список идентификаторов подписок
   
 #### launchBuySubscription(@NonNull EnumPaymentService service, @NonNull String sku)
@@ -170,6 +176,8 @@ sku - идентификатор подписки
 
 #### onActivityResult(int requestCode, int resultCode, Intent data)
 Только для Huawei оплаты
+
+
 Необходимо вызвать в onActivityResult вашего activity. Сообщает Huawei оо успешности покупки
 
 #### getControllerVerify()
@@ -210,7 +218,11 @@ sku - идентификатор подписки
 
 #### onPurchaseAcknowledgeSuccess(PurchaseData purchaseData, Map<String, PurchaseData> purchaseDataMap)
 Срабатывает при успешной покупке подписки
+
+
 Map<String, PurchaseData> purchaseDataMap - для доступа к данным используются идентификаторы подписок
+
+
 purchaseData - данные о купленной подписке
 
 #### onAcknowledgePurchaseError(String error, EnumPurchaseState enumPurchaseState)
@@ -223,7 +235,11 @@ purchaseData - данные о купленной подписке
 
 #### onHuaweiPurchaseSuccess(@Nullable PurchaseData purchaseData, Map<String, PurchaseData> map)
 Срабатывает при успешной покупке подписки
+
+
 Map<String, PurchaseData> purchaseDataMap - для доступа к данным используются идентификаторы подписок
+
+
 purchaseData - данные о купленной подписке
 
 #### onHuaweiPurchaseError(@Nullable String message, @NonNull EnumPurchaseState enumPurchaseState)
@@ -233,6 +249,8 @@ purchaseData - данные о купленной подписке
 
 #### onSuccessRequestPurchases(@NonNull Map<String, PurchaseData> purchaseDetailsMap)
 Срабатывает при успешном запросе купленных подписок
+
+
 Map<String, PurchaseData> purchaseDetailsMap - для доступа к данным используются идентификаторы подписок
 
 #### onErrorRequestPurchases(@Nullable String message)
@@ -242,6 +260,8 @@ Map<String, PurchaseData> purchaseDetailsMap - для доступа к данн
 
 #### onSuccessRequestInventory(@NonNull Map<String, SkuDetailData> skuDetailsMap)
 Срабатывает при успешном запросе информации о подписках
+
+
 Map<String, SkuDetailData> skuDetailsMap - для доступа к данным используются идентификаторы подписок
 
 #### void onErrorRequestInventory(@Nullable String error)
