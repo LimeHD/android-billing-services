@@ -145,12 +145,12 @@ limeBillingServices.launchBuySubscription(EnumPaymentService.huawei, sku);
 ## Классы
 ### LimeBillingServices
 Класс для работы с платежным модулем
-#### Методы
-##### getSkuDetailDataBySku(@NonNull EnumPaymentService service, @NonNull String sku)
+
+#### getSkuDetailDataBySku(@NonNull EnumPaymentService service, @NonNull String sku)
 Получение информации о подписке по идентификатору
 sku - идентификатор подписки
 
-##### getPurchaseDataBySku(@NonNull EnumPaymentService service, @NonNull String sku)
+#### getPurchaseDataBySku(@NonNull EnumPaymentService service, @NonNull String sku)
 Получение информации о купленной подписке по идентификатору
 sku - идентификатор подписки
 
@@ -184,17 +184,17 @@ sku - идентификатор подписки
 ### PurchaseData
 Содержит информацию о купленной подписке
 
-## ControllerInitialServices
+### ControllerInitialServices
 
-### initService(@NonNull SetupBillingInterfaces setupBillingInterfaces)
+#### initService(@NonNull SetupBillingInterfaces setupBillingInterfaces)
 Инициализирует сервисы согласно билдеру
 
-## ControllerVerifyServices
+### ControllerVerifyServices
 
-### verifyAllServices(@NonNull ExistenceServicesListener existenceServicesListener)
+#### verifyAllServices(@NonNull ExistenceServicesListener existenceServicesListener)
 Проверяет существование всех доступных сервисов
 
-### verifyService(EnumPaymentService enumPaymentService, @NonNull ExistenceServiceListener existenceServiceListener)
+#### verifyService(EnumPaymentService enumPaymentService, @NonNull ExistenceServiceListener existenceServiceListener)
 Проверяет существование сервиса
 
 
