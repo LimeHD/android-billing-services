@@ -1,28 +1,26 @@
 package tv.limehd.androidbillingmodule;
 
+import android.content.Context;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
-import tv.limehd.androidbillingmodule.servicesPay.PayService;
+import tv.limehd.androidbillingmodule.service.EnumPaymentService;
 
 import static org.junit.Assert.*;
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
 public class LimeBillingPayServicesTest {
 
     private LimeBillingServices limeBillingServices;
-    private PayService[] services;
+    private EnumPaymentService[] services;
 
 
     @Before
     public void initBillingServices() {
-        limeBillingServices = new LimeBillingServices();
-        services = PayService.values();
+        limeBillingServices = new LimeBillingServices(Mockito.mock(Context.class));
+        services = EnumPaymentService.values();
     }
 
     @Test
@@ -32,15 +30,15 @@ public class LimeBillingPayServicesTest {
 
     @Test
     public void enumServicesLowerCase() {
-        for (PayService service : services) {
+        for (EnumPaymentService service : services) {
             assertEquals(service.name(), service.name().toLowerCase());
         }
     }
 
     @Test
     public void numberOfCallsBuyMethod() {
-       for (PayService service : PayService.values()) {
-           assertTrue(limeBillingServices.tryBuySubscriptionFrom(service));
+       for (EnumPaymentService service : EnumPaymentService.values()) {
+           assertTrue(limeBillingServices.launchBuySubscription(service));
         }
     }
 
