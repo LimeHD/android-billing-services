@@ -1,7 +1,7 @@
 package tv.limehd.androidbillingmodule.service;
 
 public enum EnumPurchaseState {
-    ОК,
+    OK,
     NETWORK_ERROR,
     ITEM_NOT_SUPPORT,
     DEVELOPER_ERROR,
