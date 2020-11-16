@@ -27,7 +27,6 @@ public class ControllerInitialServices {
         //TODO: Закоментил clearServices. возникала ошибка при инициализации 2х сервисов. Необходимо проверить
         //TODO: Что ничего не сломалось в LimePremium
         //clearServices();
-        Log.e("TEST111", "INIT:: " + setupBillingInterfaces.keySet().toArray()[0].toString());
         for (EnumPaymentService servicesName : setupBillingInterfaces.keySet()) {
             ServiceSetupCallBack serviceSetupCallBack = setupBillingInterfaces.getServiceSetupCallback(servicesName);
             if(serviceSetupCallBack != null) {
