@@ -1,6 +1,7 @@
 package tv.limehd.androidbillingmodule.controllers;
 
 import android.app.Activity;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -23,7 +24,9 @@ public class ControllerInitialServices {
     }
 
     public void initService(@NonNull SetupBillingInterfaces setupBillingInterfaces) {
-        clearServices();
+        //TODO: Закоментил clearServices. возникала ошибка при инициализации 2х сервисов. Необходимо проверить
+        //TODO: Что ничего не сломалось в LimePremium
+        //clearServices();
         for (EnumPaymentService servicesName : setupBillingInterfaces.keySet()) {
             ServiceSetupCallBack serviceSetupCallBack = setupBillingInterfaces.getServiceSetupCallback(servicesName);
             if(serviceSetupCallBack != null) {
